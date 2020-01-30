@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
+    w.setWindowTitle("EasyNotepad");
     w.show();
-    w.setWindowTitle("EasyNotepad - New file");
     return a.exec();
 }

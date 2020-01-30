@@ -15,6 +15,18 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabs">
       <property name="font">
@@ -35,12 +47,12 @@
      <x>0</x>
      <y>0</y>
      <width>759</width>
-     <height>27</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>11</pointsize>
+     <pointsize>10</pointsize>
     </font>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -53,10 +65,13 @@
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
     <addaction name="separator"/>
+    <addaction name="actionAutosave"/>
+    <addaction name="separator"/>
     <addaction name="action_Close"/>
     <addaction name="actionClose_all"/>
     <addaction name="separator"/>
     <addaction name="actionDelete_file"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -86,8 +101,11 @@
     </property>
     <addaction name="actionStay_topmost"/>
     <addaction name="separator"/>
+    <addaction name="actionRemeber_opened_files"/>
+    <addaction name="separator"/>
     <addaction name="action_Exit"/>
     <addaction name="actionForce_Quit"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -254,6 +272,25 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+Q</string>
+   </property>
+  </action>
+  <action name="actionAutosave">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Autosave</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionRemeber_opened_files">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Remember opened files</string>
    </property>
   </action>
  </widget>
