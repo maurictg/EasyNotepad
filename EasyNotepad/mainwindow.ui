@@ -48,9 +48,15 @@
      <string>File</string>
     </property>
     <addaction name="action_New"/>
-    <addaction name="action_Close"/>
+    <addaction name="actionOpen"/>
     <addaction name="separator"/>
-    <addaction name="action_Exit"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSave_as"/>
+    <addaction name="separator"/>
+    <addaction name="action_Close"/>
+    <addaction name="actionClose_all"/>
+    <addaction name="separator"/>
+    <addaction name="actionDelete_file"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -79,6 +85,9 @@
      <string>Program</string>
     </property>
     <addaction name="actionStay_topmost"/>
+    <addaction name="separator"/>
+    <addaction name="action_Exit"/>
+    <addaction name="actionForce_Quit"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -87,7 +96,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Exit">
    <property name="text">
-    <string>&amp;Exit</string>
+    <string>&amp;Quit</string>
    </property>
    <property name="toolTip">
     <string>&amp;Exit</string>
@@ -101,7 +110,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Bold</string>
+    <string>&amp;Bold</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+B</string>
@@ -112,7 +121,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Italic</string>
+    <string>&amp;Italic</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
@@ -123,7 +132,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Underline</string>
+    <string>&amp;Underline</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+U</string>
@@ -150,7 +159,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Strikeout</string>
+    <string>&amp;Strikeout</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
@@ -174,7 +183,7 @@
   </action>
   <action name="actionFont_family">
    <property name="text">
-    <string>Font family</string>
+    <string>&amp;Font family</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+F</string>
@@ -182,7 +191,7 @@
   </action>
   <action name="actionColor">
    <property name="text">
-    <string>Color</string>
+    <string>&amp;Color</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+C</string>
@@ -197,6 +206,54 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+T</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>&amp;Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionClose_all">
+   <property name="text">
+    <string>Close all</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_as">
+   <property name="text">
+    <string>&amp;Save as...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionDelete_file">
+   <property name="text">
+    <string>&amp;Delete file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Del</string>
+   </property>
+  </action>
+  <action name="actionForce_Quit">
+   <property name="text">
+    <string>Force &amp;Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Q</string>
    </property>
   </action>
  </widget>

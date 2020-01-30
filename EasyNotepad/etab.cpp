@@ -11,6 +11,7 @@ ETab::ETab(MainWindow *mainwindow, QWidget *parent) :
 {
     ui->setupUi(this);
     this->main = mainwindow;
+    ui->textEdit->setFrameStyle(QFrame::NoFrame);
 }
 
 ETab::~ETab()
