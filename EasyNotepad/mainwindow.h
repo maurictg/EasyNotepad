@@ -47,7 +47,6 @@ private slots:
     void on_actionClose_all_triggered();
     void on_actionForce_Quit_triggered();
     void on_actionAutosave_triggered();
-
     void on_actionRemeber_opened_files_triggered();
 
 private:
@@ -55,7 +54,8 @@ private:
     QLabel *lblStatus;
     QLabel *lblClock;
     QString tempfile;
-    void closeEvent(QCloseEvent *bar);
+    void closeEvent(QCloseEvent *event);
+    void showEvent(QShowEvent* event);
     void setFontOnSelected(const QTextCharFormat &format);
     void openTab(QString title);
     void updateActions();
@@ -63,5 +63,6 @@ private:
     int index;
     bool remember;
     void loadTempFile();
+    void saveTempFile();
 };
 #endif // MAINWINDOW_H

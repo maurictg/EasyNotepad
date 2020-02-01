@@ -9,6 +9,8 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QCloseEvent>
+#include <QTabWidget>
+#include <QList>
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -21,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     statusBar()->setFont(font);
     font.setPointSize(13);
     ui->tabs->setFont(font);
+
+    tempfile = QDir::cleanPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "temp.enff");
 
     //Initialize status bar
     this->lblClock = new QLabel("Hi!");
@@ -35,13 +39,6 @@ MainWindow::MainWindow(QWidget *parent)
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::updateTime);
     timer->start(5000);
-
-    //Open new file
-    this->index = 0;
-    this->openTab("New file");
-    statusBar()->clearMessage();
-
-    tempfile = QDir::cleanPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "temp.enff");
 }
 
 MainWindow::~MainWindow()
@@ -54,12 +51,13 @@ MainWindow::~MainWindow()
  * Event handlers
  */
 
-void MainWindow::updateTime(){
+//Updates time label in statusBar
+void MainWindow::updateTime() {
     lblClock->setText("  \U0001F550 "+QTime::currentTime().toString("HH:mm"));
 }
 
 
-//Bold, italic, underline events
+//Bold, italic, underline, strikeout events
 void MainWindow::on_actionBold_triggered()
 {
     QTextCharFormat fmt;
@@ -143,14 +141,15 @@ void MainWindow::on_actionSave_as_triggered()
     selected->setFileName(filename);
     QFileInfo info(filename);
     QFile f(filename);
-    f.open(QIODevice::ReadWrite);
+    f.open(QIODevice::ReadWrite); //This creates the file
     ui->tabs->setTabText(ui->tabs->currentIndex(), info.fileName());
     changeTab(ACTION::SAVE);
 }
 
-
+//Save file
 void MainWindow::on_actionSave_triggered() { changeTab(ACTION::SAVE); }
 
+//Delete file
 void MainWindow::on_actionDelete_file_triggered()
 {
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Delete file?", "Are you sure you want to delete this file?",
@@ -160,10 +159,26 @@ void MainWindow::on_actionDelete_file_triggered()
     }
 }
 
-void MainWindow::closeEvent(QCloseEvent *bar){
-    on_actionClose_all_triggered();
-    std::cout << "Bye!" << std::endl;
-    bar->accept();
+//Event that is triggered when the window loads
+void MainWindow::showEvent(QShowEvent *event){
+    QWidget::showEvent(event);
+
+    //Try to load temp file
+    this->index = 0;
+    this->loadTempFile();
+    if(remember){
+        ui->actionRemeber_opened_files->setChecked(true);
+    } else{
+        //Open new file
+        this->openTab("New file");
+    }
+    statusBar()->clearMessage();
+}
+
+//Event thats triggered when user quits
+void MainWindow::closeEvent(QCloseEvent *event){
+    on_action_Exit_triggered();
+    event->accept();
 }
 
 //Other menu items
@@ -176,10 +191,14 @@ void MainWindow::on_actionForce_Quit_triggered() { exit(0); }
 
 void MainWindow::on_action_Exit_triggered()
 {
+    if(remember){
+        saveTempFile();
+    }
     on_actionClose_all_triggered();
     exit(0);
 }
 
+//Set color
 void MainWindow::on_actionColor_triggered()
 {
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
@@ -190,6 +209,7 @@ void MainWindow::on_actionColor_triggered()
     selected->changeColor();
 }
 
+//Enable/disable topmost
 void MainWindow::on_actionStay_topmost_triggered()
 {
     //Maybe other code on windows: https://stackoverflow.com/a/2860768
@@ -203,6 +223,7 @@ void MainWindow::on_actionStay_topmost_triggered()
     this->show();
 }
 
+//Close all tabs
 void MainWindow::on_actionClose_all_triggered()
 {
     int cnt = ui->tabs->count();
@@ -212,34 +233,77 @@ void MainWindow::on_actionClose_all_triggered()
     updateMessage(QString("Closed %1 files").arg(cnt));
 }
 
-void MainWindow::on_actionAutosave_triggered()
-{
-    changeTab(ACTION::SETAUTOSAVE);
-}
+//Trigger autosave
+void MainWindow::on_actionAutosave_triggered() { changeTab(ACTION::SETAUTOSAVE); }
 
+//Remeber opened files in temp.enff (documents folder)
 void MainWindow::on_actionRemeber_opened_files_triggered()
 {
-
+    remember = ui->actionRemeber_opened_files->isChecked();
+    if(!remember){
+        QFile f(tempfile);
+        if(f.exists()){
+            f.remove();
+        }
+    }
 }
 
 /*
  * Logic
  */
 
+//Load temp file if exists
 void MainWindow::loadTempFile(){
+    remember = false;
     QFile f(tempfile);
     if(f.exists()){
-        //Read file to string
+        if(!f.open(QIODevice::ReadOnly)){
+            std::cout << "Failed to open remembered files" << std::endl;
+            return;
+        }
+        QString res = f.readAll();
+        f.close();
+
+        QStringList files = res.split(",");
+        if(files.count() < 1 || res.isEmpty()){
+            return;
+        }
+
+        for (QString file : files) {
+            openTab(file);
+        }
+
         remember = true;
-    } else{
-        remember = false;
     }
+    ui->actionRemeber_opened_files->setChecked(remember);
 }
 
+//Write temp file to disk
+void MainWindow::saveTempFile(){
+    QFile f(tempfile);
+    if(!f.open(QIODevice::WriteOnly)){
+        std::cout << "Failed to save remembered files" << std::endl;
+        return;
+    }
+
+    QStringList list;
+
+    QList<ETab*> tabs = ui->tabs->findChildren<ETab*>() ;
+    for (ETab* tab : tabs) {
+        list << tab->getFileName();
+    }
+
+    QString res = list.join(",");
+    f.write(res.toUtf8());
+    f.close();
+}
+
+//Set autosave checked/unchecked
 void MainWindow::updateAutoSave(bool checked){
     ui->actionAutosave->setChecked(checked);
 }
 
+//Set font on selected tab
 void MainWindow::setFontOnSelected(const QTextCharFormat &format){
     //Get selected tab
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
@@ -251,6 +315,7 @@ void MainWindow::setFontOnSelected(const QTextCharFormat &format){
     selected->setFontFormat(format);
 }
 
+//Open new tab by file name
 void MainWindow::openTab(QString file){
     //Add tab to tabs
     ETab *tab = new ETab(this);
@@ -268,9 +333,10 @@ void MainWindow::openTab(QString file){
     ui->tabs->addTab(tab, title);
     ui->tabs->setCurrentIndex(tabCount);
     updateActions();
-    updateMessage(title+" opened!");
+    updateMessage(" \U0001F5CE "+title+" opened!");
 }
 
+//Disable/enable actions
 void MainWindow::updateActions() {
     bool enabled = (ui->tabs->count()!=0);
 
@@ -289,6 +355,7 @@ void MainWindow::updateActions() {
     ui->actionClose_all->setEnabled(enabled);
 }
 
+//Update bold/italic/underline/strikeout actions when selecting text. Triggered from ETab logic
 void MainWindow::updateActions(const QTextCharFormat &format){
     ui->actionBold->setChecked(format.font().bold());
     ui->actionUnderline->setChecked(format.font().underline());
@@ -296,14 +363,17 @@ void MainWindow::updateActions(const QTextCharFormat &format){
     ui->actionStrikeout->setChecked(format.font().strikeOut());
 }
 
+//Update status label. Triggered from ETab logic
 void MainWindow::updateStatusLabel(int line, int col){
     lblStatus->setText(QString("ln: %1 col: %2 ").arg(line).arg(col));
 }
 
+//Show message in statusBar
 void MainWindow::updateMessage(QString message){
     ui->statusbar->showMessage(message, 3000);
 }
 
+//Execute actions on selected tab
 void MainWindow::changeTab(ACTION action, int argument){
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
     if(selected == NULL){
@@ -347,7 +417,7 @@ void MainWindow::changeTab(ACTION action, int argument){
             selected->deleteLater();
             ui->tabs->removeTab(ui->tabs->currentIndex());
             updateActions();
-            updateMessage(info.fileName()+" closed!");
+            updateMessage(" \U0001F5CE "+info.fileName()+" closed!");
         break;
         case ACTION::SETAUTOSAVE:
             selected->setAutoSave(ui->actionAutosave->isChecked());
