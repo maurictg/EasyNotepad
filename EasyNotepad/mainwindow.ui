@@ -125,6 +125,15 @@
      <addaction name="actionCheckbox"/>
      <addaction name="actionCheckbox_checked"/>
     </widget>
+    <widget class="QMenu" name="menuText_alignment">
+     <property name="title">
+      <string>Text alignment</string>
+     </property>
+     <addaction name="actionLeft"/>
+     <addaction name="actionRight"/>
+     <addaction name="actionCenter"/>
+     <addaction name="actionJustify"/>
+    </widget>
     <addaction name="actionBold"/>
     <addaction name="actionItalic"/>
     <addaction name="actionUnderline"/>
@@ -137,6 +146,8 @@
     <addaction name="separator"/>
     <addaction name="actionColor"/>
     <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="menuText_alignment"/>
    </widget>
    <widget class="QMenu" name="menuProgram">
     <property name="title">
@@ -440,6 +451,38 @@
   <action name="actionCheckbox_checked">
    <property name="text">
     <string>Checkbox (checked)</string>
+   </property>
+  </action>
+  <action name="actionLeft">
+   <property name="text">
+    <string>Left</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+L</string>
+   </property>
+  </action>
+  <action name="actionRight">
+   <property name="text">
+    <string>Right</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
+   </property>
+  </action>
+  <action name="actionCenter">
+   <property name="text">
+    <string>Center</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+C</string>
+   </property>
+  </action>
+  <action name="actionJustify">
+   <property name="text">
+    <string>Justify</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+J</string>
    </property>
   </action>
  </widget>

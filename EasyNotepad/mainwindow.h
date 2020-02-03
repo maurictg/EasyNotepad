@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTextCharFormat>
 #include <QLabel>
+#include <QMenu>
 #include <iostream>
 
 
@@ -23,11 +24,12 @@ public:
     void updateActions(const QTextCharFormat &format);
     void updateMessage(QString message);
     void updateAutoSave(bool checked);
-    enum ACTION{
+    enum ACTION {
         CHANGEFONTSIZE, CHANGEFONT, CHANGECOLOR, CLOSE, SAVE, DELETE, SETAUTOSAVE,
-        SETHNORMAL,SETH1,SETH2,SETH3,SETH4,SETH5,SETH6,
+        SETHNORMAL, SETH1, SETH2, SETH3, SETH4, SETH5, SETH6,
         LISTDISK, LISTCIRCLE, LISTSQUARE, LISTUNCHECKED, LISTCHECKED, LISTDECIMAL,
-        LISTALPHALOWER, LISTALPHAUPPER, LISTROMANLOWER, LISTROMANUPPER
+        LISTALPHALOWER, LISTALPHAUPPER, LISTROMANLOWER, LISTROMANUPPER,
+        ALIGNLEFT, ALIGNCENTER, ALIGNRIGHT, ALIGNJUSTIFY
     };
 
 private slots:
@@ -69,6 +71,10 @@ private slots:
     void on_actionStandard_numeric_triggered();
     void on_actionCheckbox_triggered();
     void on_actionCheckbox_checked_triggered();
+    void on_actionLeft_triggered();
+    void on_actionRight_triggered();
+    void on_actionCenter_triggered();
+    void on_actionJustify_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -85,5 +91,6 @@ private:
     bool remember;
     void loadTempFile();
     void saveTempFile();
+    void toggleMenu(QMenu* menu, bool disable = true);
 };
 #endif // MAINWINDOW_H

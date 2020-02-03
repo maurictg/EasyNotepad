@@ -30,6 +30,7 @@ public:
     void saveFile();
     void setAutoSave(bool enabled);
     void setStyle(int type);
+    void setAlign(int type);
 
 private slots:
     void timerTick();

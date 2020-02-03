@@ -33,7 +33,6 @@ ETab::~ETab()
     delete ui;
     delete timer;
     delete file;
-    //std::cout << "INFO: Closed tab: more memory!" << std::endl;
 }
 
 /*
@@ -255,13 +254,13 @@ void ETab::setStyle(int type){
 
     cursor.beginEditBlock();
 
-    QTextBlockFormat blockFmt = cursor.blockFormat();
+    QTextBlockFormat format = cursor.blockFormat();
 
     if (style == QTextListFormat::ListStyleUndefined) {
-        blockFmt.setObjectIndex(-1);
+        format.setObjectIndex(-1);
         int headingLevel = type >= 11 ? type - 11 + 1 : 0; // H1 to H6, or Standard
-        blockFmt.setHeadingLevel(headingLevel);
-        cursor.setBlockFormat(blockFmt);
+        format.setHeadingLevel(headingLevel);
+        cursor.setBlockFormat(format);
 
         int sizeAdjustment = headingLevel ? 4 - headingLevel : 0; // H1 to H6: +3 to -2
         QTextCharFormat fmt;
@@ -271,15 +270,15 @@ void ETab::setStyle(int type){
         cursor.mergeCharFormat(fmt);
         ui->textEdit->mergeCurrentCharFormat(fmt);
     } else {
-        blockFmt.setMarker(marker);
-        cursor.setBlockFormat(blockFmt);
+        format.setMarker(marker);
+        cursor.setBlockFormat(format);
         QTextListFormat listFmt;
         if (cursor.currentList()) {
             listFmt = cursor.currentList()->format();
         } else {
-            listFmt.setIndent(blockFmt.indent() + 1);
-            blockFmt.setIndent(0);
-            cursor.setBlockFormat(blockFmt);
+            listFmt.setIndent(format.indent() + 1);
+            format.setIndent(0);
+            cursor.setBlockFormat(format);
         }
 
         listFmt.setStyle(style);
@@ -287,4 +286,21 @@ void ETab::setStyle(int type){
     }
 
     cursor.endEditBlock();
+}
+
+void ETab::setAlign(int type){
+    switch (type) {
+        case 0:
+        ui->textEdit->setAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
+            break;
+        case 1:
+        ui->textEdit->setAlignment(Qt::AlignCenter);
+            break;
+        case 2:
+        ui->textEdit->setAlignment(Qt::AlignRight | Qt::AlignAbsolute);
+            break;
+        case 3:
+            ui->textEdit->setAlignment(Qt::AlignJustify);
+        break;
+    }
 }

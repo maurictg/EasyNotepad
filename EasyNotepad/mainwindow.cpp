@@ -11,6 +11,7 @@
 #include <QCloseEvent>
 #include <QTabWidget>
 #include <QList>
+#include <QAction>
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -211,14 +212,20 @@ void MainWindow::on_actionStandard_numeric_triggered() { changeTab(ACTION::LISTD
 void MainWindow::on_actionCheckbox_triggered() { changeTab(ACTION::LISTUNCHECKED); }
 void MainWindow::on_actionCheckbox_checked_triggered() { changeTab(ACTION::LISTCHECKED); }
 
+void MainWindow::on_actionLeft_triggered() { changeTab(ACTION::ALIGNLEFT); }
+void MainWindow::on_actionRight_triggered() { changeTab(ACTION::ALIGNRIGHT); }
+void MainWindow::on_actionCenter_triggered() { changeTab(ACTION::ALIGNCENTER); }
+void MainWindow::on_actionJustify_triggered() { changeTab(ACTION::ALIGNJUSTIFY); }
 
+//Exit application
 void MainWindow::on_action_Exit_triggered()
 {
     if(remember){
         saveTempFile();
     }
     on_actionClose_all_triggered();
-    exit(0);
+    std::cout << "Bye!" << std::endl;
+    QApplication::exit(0);
 }
 
 //Enable/disable topmost
@@ -349,30 +356,25 @@ void MainWindow::openTab(QString file){
 void MainWindow::updateActions() {
     bool enabled = (ui->tabs->count()!=0);
 
-    ui->actionBold->setEnabled(enabled);
-    ui->actionItalic->setEnabled(enabled);
-    ui->actionUnderline->setEnabled(enabled);
-    ui->actionStrikeout->setEnabled(enabled);
-    ui->actionBigger->setEnabled(enabled);
-    ui->actionSmaller->setEnabled(enabled);
-    ui->actionFont_family->setEnabled(enabled);
-    ui->actionColor->setEnabled(enabled);
     ui->action_Close->setEnabled(enabled);
     ui->actionSave->setEnabled(enabled);
     ui->actionSave_as->setEnabled(enabled);
     ui->actionDelete_file->setEnabled(enabled);
     ui->actionClose_all->setEnabled(enabled);
     ui->actionAutosave->setEnabled(enabled);
-    ui->actionHeading_1->setEnabled(enabled);
-    ui->actionHeading_2->setEnabled(enabled);
-    ui->actionHeading_3->setEnabled(enabled);
-    ui->actionHeading_4->setEnabled(enabled);
-    ui->actionHeading_5->setEnabled(enabled);
-    ui->actionHeading_6->setEnabled(enabled);
-    ui->actionStandard->setEnabled(enabled);
-    ui->menuHeading->setEnabled(enabled);
-    ui->menuList->setEnabled(enabled);
-    ui->menuFont->setEnabled(enabled);
+    toggleMenu(ui->menuEdit, !enabled);
+}
+
+//Recursive function to toggle menu's
+void MainWindow::toggleMenu(QMenu *menu, bool disable){
+    for(QAction *action : menu->actions()){
+        if(!action->isSeparator()){
+            action->setEnabled(!disable);
+            if(action->menu()){
+                toggleMenu(action->menu(), disable);
+            }
+        }
+    }
 }
 
 //Update bold/italic/underline/strikeout actions when selecting text. Triggered from ETab logic
@@ -436,7 +438,7 @@ void MainWindow::changeTab(ACTION action, int argument){
             if(!info.exists() && selected->hasChanges())
             {
                 //Yes/no dialog here <----- , check for changes via getter in etab
-                QMessageBox::StandardButton res = QMessageBox::question(this, "Save file?", QString("Do you want to save %1?").arg(info.fileName()), QMessageBox::Save|QMessageBox::Cancel);
+                QMessageBox::StandardButton res = QMessageBox::question(this, "Save file?", QString("Do you want to save %1?").arg(info.fileName()), QMessageBox::Save|QMessageBox::Discard);
                 if(res == QMessageBox::Save){
                     on_actionSave_as_triggered();
                 }
@@ -458,6 +460,9 @@ void MainWindow::changeTab(ACTION action, int argument){
         break;
         case ACTION::LISTDISK: case ACTION::LISTCIRCLE: case ACTION::LISTSQUARE: case ACTION::LISTCHECKED: case ACTION::LISTDECIMAL: case ACTION::LISTUNCHECKED: case ACTION::LISTALPHALOWER: case ACTION::LISTALPHAUPPER: case ACTION::LISTROMANLOWER: case ACTION::LISTROMANUPPER:
             selected->setStyle((action - ACTION::LISTDISK) + 1);
+        break;
+        case ACTION::ALIGNLEFT: case ACTION::ALIGNRIGHT: case ACTION::ALIGNCENTER: case ACTION::ALIGNJUSTIFY:
+            selected->setAlign((action - ACTION::ALIGNLEFT));
         break;
     }
 }
