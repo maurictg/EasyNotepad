@@ -444,9 +444,8 @@ void MainWindow::changeTab(ACTION action, int argument){
             else
                 selected->saveFile();
 
-            ui->tabs->currentWidget()->deleteLater();
-            selected->deleteLater();
-            ui->tabs->removeTab(ui->tabs->currentIndex());
+            delete selected;
+            //ui->tabs->removeTab(ui->tabs->currentIndex());
             updateActions();
             updateMessage(" \U0001F5CE "+info.fileName()+" closed!");
         }

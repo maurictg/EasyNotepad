@@ -33,6 +33,7 @@ ETab::~ETab()
     delete ui;
     delete timer;
     delete file;
+    //std::cout << "INFO: Closed tab: more memory!" << std::endl;
 }
 
 /*
