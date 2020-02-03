@@ -114,14 +114,15 @@ void MainWindow::on_actionSave_as_triggered()
     QFileDialog fileDialog(this, tr("Save as..."));
     fileDialog.setAcceptMode(QFileDialog::AcceptSave);
     QStringList mimeTypes;
-    mimeTypes << "text/plain"
-#if QT_CONFIG(textodfwriter)
-              << "application/vnd.oasis.opendocument.text"
-#endif
-#if QT_CONFIG(textmarkdownwriter)
-              << "text/markdown"
-#endif
-              << "text/html";
+    mimeTypes
+              << "text/html"
+             #if QT_CONFIG(textodfwriter)
+                           << "application/vnd.oasis.opendocument.text"
+             #endif
+             #if QT_CONFIG(textmarkdownwriter)
+                           << "text/markdown"
+             #endif
+             << "text/plain";
     fileDialog.setMimeTypeFilters(mimeTypes);
 #if QT_CONFIG(textodfwriter)
     fileDialog.setDefaultSuffix("odt");
@@ -186,8 +187,30 @@ void MainWindow::on_action_New_triggered() { this->openTab("New File"); }
 void MainWindow::on_action_Close_triggered() { changeTab(ACTION::CLOSE); }
 void MainWindow::on_actionBigger_triggered() { changeTab(ACTION::CHANGEFONTSIZE, true); }
 void MainWindow::on_actionSmaller_triggered() { changeTab(ACTION::CHANGEFONTSIZE, false); }
+void MainWindow::on_actionColor_triggered() { changeTab(ACTION::CHANGECOLOR);}
 void MainWindow::on_actionFont_family_triggered() { changeTab(ACTION::CHANGEFONT); }
+void MainWindow::on_actionAutosave_triggered() { changeTab(ACTION::SETAUTOSAVE); }
 void MainWindow::on_actionForce_Quit_triggered() { exit(0); }
+
+void MainWindow::on_actionStandard_triggered() { changeTab(ACTION::SETHNORMAL); }
+void MainWindow::on_actionHeading_1_triggered() { changeTab(ACTION::SETH1); }
+void MainWindow::on_actionHeading_2_triggered() { changeTab(ACTION::SETH2); }
+void MainWindow::on_actionHeading_3_triggered() { changeTab(ACTION::SETH3); }
+void MainWindow::on_actionHeading_4_triggered() { changeTab(ACTION::SETH4); }
+void MainWindow::on_actionHeading_5_triggered() { changeTab(ACTION::SETH5); }
+void MainWindow::on_actionHeading_6_triggered() { changeTab(ACTION::SETH6); }
+
+void MainWindow::on_actionCircle_triggered() { changeTab(ACTION::LISTCIRCLE); }
+void MainWindow::on_actionSquare_triggered() { changeTab(ACTION::LISTSQUARE); }
+void MainWindow::on_actionDisc_triggered() { changeTab(ACTION::LISTDISK); }
+void MainWindow::on_actionAlpha_lower_triggered() { changeTab(ACTION::LISTALPHALOWER); }
+void MainWindow::on_actionAlpha_upper_triggered() { changeTab(ACTION::LISTALPHAUPPER); }
+void MainWindow::on_actionRoman_lower_triggered() { changeTab(ACTION::LISTROMANLOWER); }
+void MainWindow::on_actionRoman_upper_triggered() { changeTab(ACTION::LISTROMANUPPER); }
+void MainWindow::on_actionStandard_numeric_triggered() { changeTab(ACTION::LISTDECIMAL); }
+void MainWindow::on_actionCheckbox_triggered() { changeTab(ACTION::LISTUNCHECKED); }
+void MainWindow::on_actionCheckbox_checked_triggered() { changeTab(ACTION::LISTCHECKED); }
+
 
 void MainWindow::on_action_Exit_triggered()
 {
@@ -196,17 +219,6 @@ void MainWindow::on_action_Exit_triggered()
     }
     on_actionClose_all_triggered();
     exit(0);
-}
-
-//Set color
-void MainWindow::on_actionColor_triggered()
-{
-    ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
-    if(selected == NULL){
-        std::cout << "Error: selected tab is NULL" << std::endl;
-        return;
-    }
-    selected->changeColor();
 }
 
 //Enable/disable topmost
@@ -233,9 +245,6 @@ void MainWindow::on_actionClose_all_triggered()
     updateMessage(QString("Closed %1 files").arg(cnt));
 }
 
-//Trigger autosave
-void MainWindow::on_actionAutosave_triggered() { changeTab(ACTION::SETAUTOSAVE); }
-
 //Remeber opened files in temp.enff (documents folder)
 void MainWindow::on_actionRemeber_opened_files_triggered()
 {
@@ -258,7 +267,7 @@ void MainWindow::loadTempFile(){
     QFile f(tempfile);
     if(f.exists()){
         if(!f.open(QIODevice::ReadOnly)){
-            std::cout << "Failed to open remembered files" << std::endl;
+            std::cout << "ERROR: Failed to open remembered files" << std::endl;
             return;
         }
         QString res = f.readAll();
@@ -282,7 +291,7 @@ void MainWindow::loadTempFile(){
 void MainWindow::saveTempFile(){
     QFile f(tempfile);
     if(!f.open(QIODevice::WriteOnly)){
-        std::cout << "Failed to save remembered files" << std::endl;
+        std::cout << "ERROR: Failed to save remembered files" << std::endl;
         return;
     }
 
@@ -308,7 +317,7 @@ void MainWindow::setFontOnSelected(const QTextCharFormat &format){
     //Get selected tab
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
     if(selected == NULL){
-        std::cout << "Error: selected tab is NULL" << std::endl;
+        std::cout << "ERROR: selected tab is NULL" << std::endl;
         return;
     }
 
@@ -353,6 +362,17 @@ void MainWindow::updateActions() {
     ui->actionSave_as->setEnabled(enabled);
     ui->actionDelete_file->setEnabled(enabled);
     ui->actionClose_all->setEnabled(enabled);
+    ui->actionAutosave->setEnabled(enabled);
+    ui->actionHeading_1->setEnabled(enabled);
+    ui->actionHeading_2->setEnabled(enabled);
+    ui->actionHeading_3->setEnabled(enabled);
+    ui->actionHeading_4->setEnabled(enabled);
+    ui->actionHeading_5->setEnabled(enabled);
+    ui->actionHeading_6->setEnabled(enabled);
+    ui->actionStandard->setEnabled(enabled);
+    ui->menuHeading->setEnabled(enabled);
+    ui->menuList->setEnabled(enabled);
+    ui->menuFont->setEnabled(enabled);
 }
 
 //Update bold/italic/underline/strikeout actions when selecting text. Triggered from ETab logic
@@ -377,7 +397,7 @@ void MainWindow::updateMessage(QString message){
 void MainWindow::changeTab(ACTION action, int argument){
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
     if(selected == NULL){
-        std::cout << "Error: selected tab is NULL" << std::endl;
+        std::cout << "ERROR: selected tab is NULL" << std::endl;
         return;
     }
 
@@ -411,17 +431,34 @@ void MainWindow::changeTab(ACTION action, int argument){
         }
         break;
         case ACTION::CLOSE:
-            //Close current tab
-            selected->saveFile();
+        {
+            //Close and current tab
+            if(!info.exists() && selected->hasChanges())
+            {
+                //Yes/no dialog here <----- , check for changes via getter in etab
+                QMessageBox::StandardButton res = QMessageBox::question(this, "Save file?", QString("Do you want to save %1?").arg(info.fileName()), QMessageBox::Save|QMessageBox::Cancel);
+                if(res == QMessageBox::Save){
+                    on_actionSave_as_triggered();
+                }
+            }
+            else
+                selected->saveFile();
+
             ui->tabs->currentWidget()->deleteLater();
             selected->deleteLater();
             ui->tabs->removeTab(ui->tabs->currentIndex());
             updateActions();
             updateMessage(" \U0001F5CE "+info.fileName()+" closed!");
+        }
         break;
         case ACTION::SETAUTOSAVE:
             selected->setAutoSave(ui->actionAutosave->isChecked());
         break;
+        case ACTION::SETHNORMAL: case ACTION::SETH1: case ACTION::SETH2: case ACTION::SETH3: case ACTION::SETH4: case ACTION::SETH5: case ACTION::SETH6:
+            selected->setStyle((action == ACTION::SETHNORMAL) ? 0 : (action - ACTION::SETHNORMAL)+10);
+        break;
+        case ACTION::LISTDISK: case ACTION::LISTCIRCLE: case ACTION::LISTSQUARE: case ACTION::LISTCHECKED: case ACTION::LISTDECIMAL: case ACTION::LISTUNCHECKED: case ACTION::LISTALPHALOWER: case ACTION::LISTALPHAUPPER: case ACTION::LISTROMANLOWER: case ACTION::LISTROMANUPPER:
+            selected->setStyle((action - ACTION::LISTDISK) + 1);
+        break;
     }
 }
-

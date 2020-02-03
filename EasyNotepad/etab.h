@@ -3,6 +3,9 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QFile>
+#include <QTextListFormat>
+#include <QTextCharFormat>
 #include <mainwindow.h>
 
 namespace Ui {
@@ -18,6 +21,7 @@ public:
     ~ETab();
     void setFontFormat(const QTextCharFormat &format);
     QString getFileName();
+    bool hasChanges();
     void setFileName(QString name);
     void changeFontSize(bool increase);
     void changeFont();
@@ -25,6 +29,7 @@ public:
     void openFile();
     void saveFile();
     void setAutoSave(bool enabled);
+    void setStyle(int type);
 
 private slots:
     void timerTick();
@@ -35,11 +40,13 @@ private slots:
 private:
     Ui::ETab *ui;
     MainWindow *main;
-    QString file;
+    QFile *file;
     QTimer *timer;
     bool autosave;
     bool changes;
     void useFile(bool write);
+    void mergeFormat(QTextCharFormat format);
+    QString getName();
 };
 
 #endif // ETAB_H

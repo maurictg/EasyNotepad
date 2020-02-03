@@ -7,6 +7,7 @@
 #include <iostream>
 
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -23,7 +24,10 @@ public:
     void updateMessage(QString message);
     void updateAutoSave(bool checked);
     enum ACTION{
-        CHANGEFONTSIZE, CHANGEFONT, CHANGECOLOR, CLOSE, SAVE, DELETE, SETAUTOSAVE
+        CHANGEFONTSIZE, CHANGEFONT, CHANGECOLOR, CLOSE, SAVE, DELETE, SETAUTOSAVE,
+        SETHNORMAL,SETH1,SETH2,SETH3,SETH4,SETH5,SETH6,
+        LISTDISK, LISTCIRCLE, LISTSQUARE, LISTUNCHECKED, LISTCHECKED, LISTDECIMAL,
+        LISTALPHALOWER, LISTALPHAUPPER, LISTROMANLOWER, LISTROMANUPPER
     };
 
 private slots:
@@ -48,6 +52,23 @@ private slots:
     void on_actionForce_Quit_triggered();
     void on_actionAutosave_triggered();
     void on_actionRemeber_opened_files_triggered();
+    void on_actionStandard_triggered();
+    void on_actionHeading_1_triggered();
+    void on_actionHeading_2_triggered();
+    void on_actionHeading_3_triggered();
+    void on_actionHeading_4_triggered();
+    void on_actionHeading_5_triggered();
+    void on_actionHeading_6_triggered();
+    void on_actionCircle_triggered();
+    void on_actionSquare_triggered();
+    void on_actionDisc_triggered();
+    void on_actionAlpha_lower_triggered();
+    void on_actionAlpha_upper_triggered();
+    void on_actionRoman_lower_triggered();
+    void on_actionRoman_upper_triggered();
+    void on_actionStandard_numeric_triggered();
+    void on_actionCheckbox_triggered();
+    void on_actionCheckbox_checked_triggered();
 
 private:
     Ui::MainWindow *ui;

@@ -86,14 +86,57 @@
      <addaction name="separator"/>
      <addaction name="actionFont_family"/>
     </widget>
+    <widget class="QMenu" name="menuHeading">
+     <property name="title">
+      <string>Heading</string>
+     </property>
+     <addaction name="actionStandard"/>
+     <addaction name="actionHeading_1"/>
+     <addaction name="actionHeading_2"/>
+     <addaction name="actionHeading_3"/>
+     <addaction name="actionHeading_4"/>
+     <addaction name="actionHeading_5"/>
+     <addaction name="actionHeading_6"/>
+    </widget>
+    <widget class="QMenu" name="menuList">
+     <property name="title">
+      <string>List</string>
+     </property>
+     <widget class="QMenu" name="menuBullet_list">
+      <property name="title">
+       <string>Bullet list</string>
+      </property>
+      <addaction name="actionCircle"/>
+      <addaction name="actionSquare"/>
+      <addaction name="actionDisc"/>
+     </widget>
+     <widget class="QMenu" name="menuOrdered_list">
+      <property name="title">
+       <string>Ordered list</string>
+      </property>
+      <addaction name="actionAlpha_lower"/>
+      <addaction name="actionAlpha_upper"/>
+      <addaction name="actionRoman_lower"/>
+      <addaction name="actionRoman_upper"/>
+      <addaction name="actionStandard_numeric"/>
+     </widget>
+     <addaction name="menuBullet_list"/>
+     <addaction name="menuOrdered_list"/>
+     <addaction name="actionCheckbox"/>
+     <addaction name="actionCheckbox_checked"/>
+    </widget>
     <addaction name="actionBold"/>
     <addaction name="actionItalic"/>
     <addaction name="actionUnderline"/>
     <addaction name="actionStrikeout"/>
     <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="menuHeading"/>
     <addaction name="menuFont"/>
+    <addaction name="menuList"/>
     <addaction name="separator"/>
     <addaction name="actionColor"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuProgram">
     <property name="title">
@@ -291,6 +334,112 @@
    </property>
    <property name="text">
     <string>Remember opened files</string>
+   </property>
+  </action>
+  <action name="actionStandard">
+   <property name="text">
+    <string>Standard</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+0</string>
+   </property>
+  </action>
+  <action name="actionHeading_1">
+   <property name="text">
+    <string>Heading 1</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+1</string>
+   </property>
+  </action>
+  <action name="actionHeading_2">
+   <property name="text">
+    <string>Heading 2</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+2</string>
+   </property>
+  </action>
+  <action name="actionHeading_3">
+   <property name="text">
+    <string>Heading 3</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+3</string>
+   </property>
+  </action>
+  <action name="actionHeading_4">
+   <property name="text">
+    <string>Heading 4</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+4</string>
+   </property>
+  </action>
+  <action name="actionHeading_5">
+   <property name="text">
+    <string>Heading 5</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+5</string>
+   </property>
+  </action>
+  <action name="actionHeading_6">
+   <property name="text">
+    <string>Heading 6</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+6</string>
+   </property>
+  </action>
+  <action name="actionCircle">
+   <property name="text">
+    <string>Circle</string>
+   </property>
+  </action>
+  <action name="actionSquare">
+   <property name="text">
+    <string>Square</string>
+   </property>
+  </action>
+  <action name="actionDisc">
+   <property name="text">
+    <string>Disc</string>
+   </property>
+  </action>
+  <action name="actionAlpha_lower">
+   <property name="text">
+    <string>Alpha lower</string>
+   </property>
+  </action>
+  <action name="actionAlpha_upper">
+   <property name="text">
+    <string>Alpha upper</string>
+   </property>
+  </action>
+  <action name="actionRoman_lower">
+   <property name="text">
+    <string>Roman lower</string>
+   </property>
+  </action>
+  <action name="actionRoman_upper">
+   <property name="text">
+    <string>Roman upper</string>
+   </property>
+  </action>
+  <action name="actionStandard_numeric">
+   <property name="text">
+    <string>Standard (numeric)</string>
+   </property>
+  </action>
+  <action name="actionCheckbox">
+   <property name="text">
+    <string>Checkbox</string>
+   </property>
+  </action>
+  <action name="actionCheckbox_checked">
+   <property name="text">
+    <string>Checkbox (checked)</string>
    </property>
   </action>
  </widget>
