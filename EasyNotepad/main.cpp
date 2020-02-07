@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+#if defined(Q_OS_WIN)
     //Load dark theme
     QFile f(":qdarkstyle/style.qss");
 
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
         QTextStream ts(&f);
         a.setStyleSheet(ts.readAll());
     }
+#endif
 
     MainWindow w;
     w.setWindowTitle("EasyNotepad");

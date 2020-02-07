@@ -373,6 +373,10 @@
    </property>
   </action>
   <action name="actionDelete_file">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/delete_bin_24px.png</normaloff>:/icons/icons/delete_bin_24px.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Delete file</string>
    </property>
@@ -550,6 +554,10 @@
    </property>
   </action>
   <action name="actionLeft">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/align_left_24px.png</normaloff>:/icons/icons/align_left_24px.png</iconset>
+   </property>
    <property name="text">
     <string>Left</string>
    </property>
@@ -558,6 +566,10 @@
    </property>
   </action>
   <action name="actionRight">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/align_right_24px.png</normaloff>:/icons/icons/align_right_24px.png</iconset>
+   </property>
    <property name="text">
     <string>Right</string>
    </property>
@@ -566,6 +578,10 @@
    </property>
   </action>
   <action name="actionCenter">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/align_center_24px.png</normaloff>:/icons/icons/align_center_24px.png</iconset>
+   </property>
    <property name="text">
     <string>Center</string>
    </property>
@@ -574,6 +590,10 @@
    </property>
   </action>
   <action name="actionJustify">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/align_justify_24px.png</normaloff>:/icons/icons/align_justify_24px.png</iconset>
+   </property>
    <property name="text">
     <string>Justify</string>
    </property>

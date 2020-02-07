@@ -170,7 +170,7 @@ void MainWindow::on_actionDelete_file_triggered()
 
 //Event that is triggered when the window loads
 void MainWindow::showEvent(QShowEvent *event){
-    if(!donotload)
+    if(donotload)
         return;
 
     QWidget::showEvent(event);
