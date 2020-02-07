@@ -76,13 +76,13 @@ private slots:
     void on_actionCenter_triggered();
     void on_actionJustify_triggered();
 
+    void on_actionExport_PDF_triggered();
+
 private:
     Ui::MainWindow *ui;
     QLabel *lblStatus;
     QLabel *lblClock;
     QString tempfile;
-    void closeEvent(QCloseEvent *event);
-    void showEvent(QShowEvent* event);
     void setFontOnSelected(const QTextCharFormat &format);
     void openTab(QString title);
     void updateActions();
@@ -92,5 +92,10 @@ private:
     void loadTempFile();
     void saveTempFile();
     void toggleMenu(QMenu* menu, bool disable = true);
+    //Event overloads
+    void closeEvent(QCloseEvent *event);
+    void showEvent(QShowEvent* event);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 };
 #endif // MAINWINDOW_H

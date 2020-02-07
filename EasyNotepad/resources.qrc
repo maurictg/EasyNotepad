@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/bold.png</file>
+        <file>icons/checklist.png</file>
+        <file>icons/choose_font.png</file>
+        <file>icons/close_all_tabs_48px.png</file>
+        <file>icons/close_pane_48px.png</file>
+        <file>icons/close_window_48px.png</file>
+        <file>icons/color_mode_48px.png</file>
+        <file>icons/decrease_font_48px.png</file>
+        <file>icons/delete_file_48px.png</file>
+        <file>icons/exit_48px.png</file>
+        <file>icons/folder_48px.png</file>
+        <file>icons/header_1_48px.png</file>
+        <file>icons/header_2_48px.png</file>
+        <file>icons/header_3_48px.png</file>
+        <file>icons/idea_48px.png</file>
+        <file>icons/increase_font_48px.png</file>
+        <file>icons/italic_48px.png</file>
+        <file>icons/list_48px.png</file>
+        <file>icons/list.png</file>
+        <file>icons/new_copy_48px.png</file>
+        <file>icons/numbered_list_48px.png</file>
+        <file>icons/save_48px.png</file>
+        <file>icons/save_as_48px.png</file>
+        <file>icons/save_close_48px.png</file>
+        <file>icons/strikethrough_48px.png</file>
+        <file>icons/type_48px.png</file>
+        <file>icons/underline_48px.png</file>
+        <file>icons/icons8_copybook.ico</file>
+    </qresource>
+</RCC>

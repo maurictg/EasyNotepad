@@ -12,6 +12,9 @@
 #include <QTabWidget>
 #include <QList>
 #include <QAction>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMimeData>
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -40,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::updateTime);
     timer->start(5000);
+
+    setAcceptDrops(true);
 }
 
 MainWindow::~MainWindow()
@@ -155,7 +160,7 @@ void MainWindow::on_actionSave_triggered() { changeTab(ACTION::SAVE); }
 void MainWindow::on_actionDelete_file_triggered()
 {
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Delete file?", "Are you sure you want to delete this file?",
-                                    QMessageBox::Yes|QMessageBox::No);
+                                    QMessageBox::Yes|QMessageBox::Cancel);
     if(reply == QMessageBox::Yes){
         changeTab(ACTION::DELETE);
     }
@@ -261,6 +266,19 @@ void MainWindow::on_actionRemeber_opened_files_triggered()
         if(f.exists()){
             f.remove();
         }
+    }
+}
+
+//Drag and drop
+void MainWindow::dragEnterEvent(QDragEnterEvent *event){
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    }
+}
+
+void MainWindow::dropEvent(QDropEvent *event){
+    foreach (const QUrl &url, event->mimeData()->urls()) {
+        openTab(url.toLocalFile());
     }
 }
 

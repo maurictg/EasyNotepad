@@ -167,6 +167,10 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Exit">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/exit_48px.png</normaloff>:/icons/icons/exit_48px.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Quit</string>
    </property>
@@ -181,6 +185,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/bold.png</normaloff>:/icons/icons/bold.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Bold</string>
    </property>
@@ -191,6 +199,10 @@
   <action name="actionItalic">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/italic_48px.png</normaloff>:/icons/icons/italic_48px.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Italic</string>
@@ -203,6 +215,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/underline_48px.png</normaloff>:/icons/icons/underline_48px.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Underline</string>
    </property>
@@ -211,6 +227,10 @@
    </property>
   </action>
   <action name="action_New">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/new_copy_48px.png</normaloff>:/icons/icons/new_copy_48px.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;New</string>
    </property>
@@ -219,6 +239,10 @@
    </property>
   </action>
   <action name="action_Close">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/close_pane_48px.png</normaloff>:/icons/icons/close_pane_48px.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Close</string>
    </property>
@@ -230,6 +254,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/strikethrough_48px.png</normaloff>:/icons/icons/strikethrough_48px.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Strikeout</string>
    </property>
@@ -238,6 +266,10 @@
    </property>
   </action>
   <action name="actionBigger">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/increase_font_48px.png</normaloff>:/icons/icons/increase_font_48px.png</iconset>
+   </property>
    <property name="text">
     <string>Bigger</string>
    </property>
@@ -246,6 +278,10 @@
    </property>
   </action>
   <action name="actionSmaller">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/decrease_font_48px.png</normaloff>:/icons/icons/decrease_font_48px.png</iconset>
+   </property>
    <property name="text">
     <string>Smaller</string>
    </property>
@@ -254,6 +290,10 @@
    </property>
   </action>
   <action name="actionFont_family">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/choose_font.png</normaloff>:/icons/icons/choose_font.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Font family</string>
    </property>
@@ -262,6 +302,10 @@
    </property>
   </action>
   <action name="actionColor">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/color_mode_48px.png</normaloff>:/icons/icons/color_mode_48px.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Color</string>
    </property>
@@ -281,6 +325,10 @@
    </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/folder_48px.png</normaloff>:/icons/icons/folder_48px.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Open</string>
    </property>
@@ -289,6 +337,10 @@
    </property>
   </action>
   <action name="actionClose_all">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/close_all_tabs_48px.png</normaloff>:/icons/icons/close_all_tabs_48px.png</iconset>
+   </property>
    <property name="text">
     <string>Close all</string>
    </property>
@@ -297,6 +349,10 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/save_48px.png</normaloff>:/icons/icons/save_48px.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Save</string>
    </property>
@@ -305,6 +361,10 @@
    </property>
   </action>
   <action name="actionSave_as">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/save_as_48px.png</normaloff>:/icons/icons/save_as_48px.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Save as...</string>
    </property>
@@ -332,6 +392,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/save_close_48px.png</normaloff>:/icons/icons/save_close_48px.png</iconset>
+   </property>
    <property name="text">
     <string>Autosave</string>
    </property>
@@ -342,6 +406,10 @@
   <action name="actionRemeber_opened_files">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/idea_48px.png</normaloff>:/icons/icons/idea_48px.png</iconset>
    </property>
    <property name="text">
     <string>Remember opened files</string>
@@ -356,6 +424,10 @@
    </property>
   </action>
   <action name="actionHeading_1">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/header_1_48px.png</normaloff>:/icons/icons/header_1_48px.png</iconset>
+   </property>
    <property name="text">
     <string>Heading 1</string>
    </property>
@@ -364,6 +436,10 @@
    </property>
   </action>
   <action name="actionHeading_2">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/header_2_48px.png</normaloff>:/icons/icons/header_2_48px.png</iconset>
+   </property>
    <property name="text">
     <string>Heading 2</string>
    </property>
@@ -372,6 +448,10 @@
    </property>
   </action>
   <action name="actionHeading_3">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/header_3_48px.png</normaloff>:/icons/icons/header_3_48px.png</iconset>
+   </property>
    <property name="text">
     <string>Heading 3</string>
    </property>
@@ -404,6 +484,10 @@
    </property>
   </action>
   <action name="actionCircle">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/list.png</normaloff>:/icons/icons/list.png</iconset>
+   </property>
    <property name="text">
     <string>Circle</string>
    </property>
@@ -414,6 +498,10 @@
    </property>
   </action>
   <action name="actionDisc">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/list_48px.png</normaloff>:/icons/icons/list_48px.png</iconset>
+   </property>
    <property name="text">
     <string>Disc</string>
    </property>
@@ -439,11 +527,19 @@
    </property>
   </action>
   <action name="actionStandard_numeric">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/numbered_list_48px.png</normaloff>:/icons/icons/numbered_list_48px.png</iconset>
+   </property>
    <property name="text">
     <string>Standard (numeric)</string>
    </property>
   </action>
   <action name="actionCheckbox">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/icons/checklist.png</normaloff>:/icons/icons/checklist.png</iconset>
+   </property>
    <property name="text">
     <string>Checkbox</string>
    </property>
@@ -486,6 +582,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -97,6 +97,8 @@ void ETab::useFile(bool write){
             std::cout << "ERROR: Failed to read file" << std::endl;
             return;
         }
+
+        //Use mimetypes. Can also check on endsWith
         QByteArray data = file->readAll();
         QTextCodec *codec = Qt::codecForHtml(data);
         QString str = codec->toUnicode(data);
@@ -106,8 +108,9 @@ void ETab::useFile(bool write){
             ui->textEdit->setHtml(str);
         } else {
             QMimeDatabase db;
-            if (db.mimeTypeForFileNameAndData(file->fileName(), data).name() == QLatin1String("text/markdown"))
+            if (db.mimeTypeForFileNameAndData(file->fileName(), data).name() == QLatin1String("text/markdown")){
                 ui->textEdit->setMarkdown(str);
+            }
             else
                 ui->textEdit->setPlainText(QString::fromLocal8Bit(data));
         }
@@ -224,14 +227,14 @@ void ETab::setStyle(int type){
             style = cursor.currentList()->format().style();
         else
             style = QTextListFormat::ListDisc;
-        marker = QTextBlockFormat::MarkerType::Unchecked;
+            marker = QTextBlockFormat::MarkerType::Unchecked;
         break;
     case 5:
         if (cursor.currentList())
             style = cursor.currentList()->format().style();
         else
             style = QTextListFormat::ListDisc;
-        marker = QTextBlockFormat::MarkerType::Checked;
+            marker = QTextBlockFormat::MarkerType::Checked;
         break;
     case 6:
         style = QTextListFormat::ListDecimal;
