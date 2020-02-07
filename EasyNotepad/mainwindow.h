@@ -76,8 +76,6 @@ private slots:
     void on_actionCenter_triggered();
     void on_actionJustify_triggered();
 
-    void on_actionExport_PDF_triggered();
-
 private:
     Ui::MainWindow *ui;
     QLabel *lblStatus;
@@ -89,6 +87,7 @@ private:
     void changeTab(ACTION action, int argument = 0);
     int index;
     bool remember;
+    bool donotload;
     void loadTempFile();
     void saveTempFile();
     void toggleMenu(QMenu* menu, bool disable = true);

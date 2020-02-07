@@ -45,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent)
     timer->start(5000);
 
     setAcceptDrops(true);
+
+    this->donotload = false;
 }
 
 MainWindow::~MainWindow()
@@ -168,6 +170,9 @@ void MainWindow::on_actionDelete_file_triggered()
 
 //Event that is triggered when the window loads
 void MainWindow::showEvent(QShowEvent *event){
+    if(!donotload)
+        return;
+
     QWidget::showEvent(event);
 
     //Try to load temp file
@@ -180,6 +185,7 @@ void MainWindow::showEvent(QShowEvent *event){
         this->openTab("New file");
     }
     statusBar()->clearMessage();
+    this->donotload = true;
 }
 
 //Event thats triggered when user quits

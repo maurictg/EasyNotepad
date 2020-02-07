@@ -37,3 +37,4 @@ DISTFILES +=
 
 RESOURCES += \
     resources.qrc
+RESOURCES += qdarkstyle/style.qrc
