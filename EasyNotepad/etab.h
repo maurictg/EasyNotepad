@@ -22,6 +22,7 @@ public:
     void setFontFormat(const QTextCharFormat &format);
     QString getFileName();
     bool hasChanges();
+    bool isAutosave();
     void setFileName(QString name);
     void changeFontSize(bool increase);
     void changeFont();

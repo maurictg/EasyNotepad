@@ -298,7 +298,7 @@ void MainWindow::loadTempFile(){
     QFile f(tempfile);
     if(f.exists()){
         if(!f.open(QIODevice::ReadOnly)){
-            std::cout << "ERROR: Failed to open remembered files" << std::endl;
+            std::cerr << "ERROR: Failed to open remembered files" << std::endl;
             return;
         }
         QString res = f.readAll();
@@ -322,7 +322,7 @@ void MainWindow::loadTempFile(){
 void MainWindow::saveTempFile(){
     QFile f(tempfile);
     if(!f.open(QIODevice::WriteOnly)){
-        std::cout << "ERROR: Failed to save remembered files" << std::endl;
+        std::cerr << "ERROR: Failed to save remembered files" << std::endl;
         return;
     }
 
@@ -348,7 +348,7 @@ void MainWindow::setFontOnSelected(const QTextCharFormat &format){
     //Get selected tab
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
     if(selected == NULL){
-        std::cout << "ERROR: selected tab is NULL" << std::endl;
+        std::cerr << "ERROR: selected tab is NULL" << std::endl;
         return;
     }
 
@@ -419,11 +419,12 @@ void MainWindow::updateMessage(QString message){
     ui->statusbar->showMessage(message, 3000);
 }
 
+
 //Execute actions on selected tab
 void MainWindow::changeTab(ACTION action, int argument){
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
     if(selected == NULL){
-        std::cout << "ERROR: selected tab is NULL" << std::endl;
+        std::cerr << "ERROR: selected tab is NULL" << std::endl;
         return;
     }
 
@@ -461,7 +462,6 @@ void MainWindow::changeTab(ACTION action, int argument){
             //Close and current tab
             if(!info.exists() && selected->hasChanges())
             {
-                //Yes/no dialog here <----- , check for changes via getter in etab
                 QMessageBox::StandardButton res = QMessageBox::question(this, "Save file?", QString("Do you want to save %1?").arg(info.fileName()), QMessageBox::Save|QMessageBox::Discard);
                 if(res == QMessageBox::Save){
                     on_actionSave_as_triggered();

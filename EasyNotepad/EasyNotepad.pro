@@ -38,3 +38,6 @@ DISTFILES +=
 RESOURCES += \
     resources.qrc
 RESOURCES += qdarkstyle/style.qrc
+
+RC_ICONS = icons/icons8_copybook.ico
+ICON = icons/icons8_copybook.ico

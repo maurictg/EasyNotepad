@@ -49,7 +49,7 @@ void ETab::on_textEdit_cursorPositionChanged()
     if(main != NULL){
         main->updateStatusLabel((cursor.blockNumber()+1), (cursor.columnNumber()+1));
     } else{
-        std::cout << "ERROR: Nullpointerexception" << std::endl;
+        std::cerr << "ERROR: Nullpointerexception" << std::endl;
     }
 }
 
@@ -94,7 +94,7 @@ void ETab::useFile(bool write){
     if(!write){
         //Read data from file
         if(!file->open(QIODevice::ReadOnly)){
-            std::cout << "ERROR: Failed to read file" << std::endl;
+            std::cerr << "ERROR: Failed to read file" << std::endl;
             return;
         }
 
@@ -123,7 +123,7 @@ void ETab::useFile(bool write){
         else {
             QString text = ui->textEdit->toPlainText();
             if(!file->open(QIODevice::WriteOnly)){
-                std::cout << "ERROR: Failed to open file" << std::endl;
+                std::cerr << "ERROR: Failed to open file" << std::endl;
                 return;
             }
             file->write(text.toUtf8());
@@ -160,7 +160,16 @@ QString ETab::getName(){
     return i.fileName();
 }
 
-bool ETab::hasChanges() { return changes; }
+bool ETab::hasChanges() {
+    if(ui->textEdit->toPlainText().length() == 0)
+        return false;
+
+    return changes;
+}
+
+bool ETab::isAutosave() {
+    return autosave;
+}
 
 //Increase/decrease fontsize
 void ETab::changeFontSize(bool increase){
@@ -226,15 +235,20 @@ void ETab::setStyle(int type){
         if (cursor.currentList())
             style = cursor.currentList()->format().style();
         else
+        {
             style = QTextListFormat::ListDisc;
             marker = QTextBlockFormat::MarkerType::Unchecked;
+        }
         break;
     case 5:
         if (cursor.currentList())
             style = cursor.currentList()->format().style();
         else
+        {
             style = QTextListFormat::ListDisc;
             marker = QTextBlockFormat::MarkerType::Checked;
+        }
+
         break;
     case 6:
         style = QTextListFormat::ListDecimal;
