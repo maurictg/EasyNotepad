@@ -1,5 +1,8 @@
 # EasyNotepad++
-EasyNotepad++ is an richtext editor for Windows and Linux. It supports HTML, Markdown, and plain text files. It is also able to export a file to an odf file.
+EasyNotepad++ is an richtext editor for Windows and Linux. It supports HTML, Markdown, and plain text files. It is also able to export a file to an odf file. It is made with QT and C++
+
+# Licence
+EasyNotepad is licenced under the MIT-licence.
 
 ## Screenshots
 
