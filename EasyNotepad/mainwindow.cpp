@@ -16,6 +16,9 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <iostream>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -23,21 +26,23 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QFont font("Consolas", 10);
-    statusBar()->setFont(font);
-    font.setPointSize(13);
+    QFont font("Consolas", 12);
     ui->tabs->setFont(font);
 
-    tempfile = QDir::cleanPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "temp.enff");
+    font.setPointSize(10);
 
     //Initialize status bar
     this->lblClock = new QLabel("Hi!");
     lblClock->setAlignment(Qt::AlignLeft);
-    statusBar()->addWidget(lblClock, 1);
+    lblClock->setFont(font);
 
     this->lblStatus = new QLabel("ln: 0 col: 0 ");
     lblStatus->setAlignment(Qt::AlignRight);
+    lblStatus->setFont(font);
+
+    statusBar()->addWidget(lblClock, 1);
     statusBar()->addWidget(lblStatus, 1);
+    statusBar()->setFont(font);
 
     updateTime();
     QTimer *timer = new QTimer(this);
@@ -45,8 +50,9 @@ MainWindow::MainWindow(QWidget *parent)
     timer->start(5000);
 
     setAcceptDrops(true);
-
     this->donotload = false;
+
+    tempfile = QDir::cleanPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "temp.enff");
 }
 
 MainWindow::~MainWindow()
@@ -234,6 +240,7 @@ void MainWindow::on_action_Exit_triggered()
     if(remember){
         saveTempFile();
     }
+
     on_actionClose_all_triggered();
     std::cout << "Bye!" << std::endl;
     QApplication::exit(0);
@@ -260,6 +267,7 @@ void MainWindow::on_actionClose_all_triggered()
     while(ui->tabs->count()>0){
         changeTab(ACTION::CLOSE);
     }
+
     updateMessage(QString("Closed %1 files").arg(cnt));
 }
 
@@ -295,26 +303,54 @@ void MainWindow::dropEvent(QDropEvent *event){
 //Load temp file if exists
 void MainWindow::loadTempFile(){
     remember = false;
+
+    //Create list
+    QJsonArray files;
+
+    //Load temp file
     QFile f(tempfile);
     if(f.exists()){
         if(!f.open(QIODevice::ReadOnly)){
             std::cerr << "ERROR: Failed to open remembered files" << std::endl;
             return;
         }
+
         QString res = f.readAll();
         f.close();
 
-        QStringList files = res.split(",");
-        if(files.count() < 1 || res.isEmpty()){
-            return;
+        if(res.length() > 0) {
+            QJsonDocument doc = QJsonDocument::fromJson(res.toUtf8());
+            if(!doc.isNull() && doc.isObject()) {
+                //Read document to object
+                QJsonObject json = doc.object();
+                if(json.contains("files") && json["files"].isArray()) {
+                    files = json["files"].toArray();
+                }
+
+                //Screen resolution and other settings. Maybe object "settings"
+                if(json.contains("resolution") && json["resolution"].isArray()) {
+                    QJsonArray arr = json["resolution"].toArray();
+                    if(arr.size() == 2) {
+                        int width = arr[0].toInt();
+                        int heigth = arr[1].toInt();
+                        //This is how i resize window without struggles :D
+                        MainWindow::setFixedSize(width, heigth);
+                        MainWindow::setMinimumSize(0,0);
+                        MainWindow::setMaximumSize(16777215,16777215);
+                    }
+                }
+            }
         }
 
-        for (QString file : files) {
-            openTab(file);
-        }
+        if(files.count() > 0){
+            for (int i = 0; i < files.size(); i++) {
+                openTab(files[i].toString());
+            }
 
-        remember = true;
+            remember = true;
+        }
     }
+
     ui->actionRemeber_opened_files->setChecked(remember);
 }
 
@@ -326,14 +362,22 @@ void MainWindow::saveTempFile(){
         return;
     }
 
-    QStringList list;
-
+    QJsonArray files;
     QList<ETab*> tabs = ui->tabs->findChildren<ETab*>() ;
-    for (ETab* tab : tabs) {
-        list << tab->getFileName();
+    for (ETab* t : tabs) {
+        files.append(t->getFileName());
     }
 
-    QString res = list.join(",");
+    QJsonArray resolution;
+    resolution.append(MainWindow::width());
+    resolution.append(MainWindow::height());
+
+    QJsonObject object;
+    object["files"] = files;
+    object["resolution"] = resolution;
+
+    QJsonDocument doc(object);
+    QString res = doc.toJson();
     f.write(res.toUtf8());
     f.close();
 }
@@ -372,6 +416,7 @@ void MainWindow::openTab(QString file){
 
     ui->tabs->addTab(tab, title);
     ui->tabs->setCurrentIndex(tabCount);
+    tab->focus();
     updateActions();
     updateMessage(" \U0001F5CE "+title+" opened!");
 }
@@ -489,4 +534,12 @@ void MainWindow::changeTab(ACTION action, int argument){
             selected->setAlign((action - ACTION::ALIGNLEFT));
         break;
     }
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    openTab("About");
+    QString hardCodedAboutPage = "<h1>EasyNotepad++</h1><p>EasyNotepad++ is an richtext editor for Windows and Linux. It supports HTML, Markdown, and plain text files. It is also able to export a file to an odf file. It is made with QT and C++</p><h1>Licence</h1><p>EasyNotepad is licenced under the MIT-licence.</p><br/><h4>&rarr;&nbsp;More info, see <a href=\"https://github.com/maurictg/EasyNotepadPlusPlus\">https://github.com/maurictg/EasyNotepadPlusPlus</a></h4>";
+    ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
+    selected->setText(hardCodedAboutPage, false);
 }

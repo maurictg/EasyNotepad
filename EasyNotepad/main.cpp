@@ -36,10 +36,9 @@ int main(int argc, char *argv[])
             darkPalette.setColor(QPalette::Disabled, QPalette::HighlightedText, disabledColor);
 
             qApp->setPalette(darkPalette);
-
             qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
         }
-        else //When not set to dark theme, use custom theme which is darker
+        else //When not set to dark theme, use custom theme which is darker than light theme
         {
             QFile f(":qdarkstyle/style.qss");
 

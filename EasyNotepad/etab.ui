@@ -53,7 +53,7 @@
       <set>Qt::LinksAccessibleByMouse|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
      </property>
      <property name="placeholderText">
-      <string>Enter a note...</string>
+      <string>Take a note...</string>
      </property>
     </widget>
    </item>

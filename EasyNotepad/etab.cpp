@@ -35,6 +35,11 @@ ETab::~ETab()
     delete file;
 }
 
+void ETab::focus() {
+    ui->textEdit->setFocus();
+}
+
+
 /*
  * Event handlers
  */
@@ -67,6 +72,11 @@ void ETab::timerTick(){
 /*
  * Logic
  */
+
+void ETab::setText(QString text, bool doSave) {
+    ui->textEdit->setHtml(text);
+    this->dontSave = !doSave;
+}
 
 //Set font format on selected tab
 void ETab::setFontFormat(const QTextCharFormat &format){
@@ -161,7 +171,7 @@ QString ETab::getName(){
 }
 
 bool ETab::hasChanges() {
-    if(ui->textEdit->toPlainText().length() == 0)
+    if(ui->textEdit->toPlainText().length() == 0 || dontSave)
         return false;
 
     return changes;

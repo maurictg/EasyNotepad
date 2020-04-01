@@ -32,6 +32,8 @@ public:
     void setAutoSave(bool enabled);
     void setStyle(int type);
     void setAlign(int type);
+    void focus();
+    void setText(QString text, bool doSave = true);
 
 private slots:
     void timerTick();
@@ -46,6 +48,7 @@ private:
     QTimer *timer;
     bool autosave;
     bool changes;
+    bool dontSave;
     void useFile(bool write);
     void mergeFormat(QTextCharFormat format);
     QString getName();

@@ -75,6 +75,8 @@ private slots:
     void on_actionCenter_triggered();
     void on_actionJustify_triggered();
 
+    void on_actionAbout_triggered();
+
 private:
     Ui::MainWindow *ui;
     QLabel *lblStatus;

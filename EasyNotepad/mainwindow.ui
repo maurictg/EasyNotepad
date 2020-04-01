@@ -6,14 +6,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>750</height>
+    <width>850</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <property name="locale">
+   <locale language="English" country="UnitedStates"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: ./icons8/icons8_copybook.ico</string>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
      <number>0</number>
@@ -31,11 +43,18 @@
      <widget class="QTabWidget" name="tabs">
       <property name="font">
        <font>
+        <family>Consolas</family>
         <pointsize>12</pointsize>
        </font>
       </property>
+      <property name="acceptDrops">
+       <bool>false</bool>
+      </property>
       <property name="currentIndex">
        <number>-1</number>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
       </property>
      </widget>
     </item>
@@ -46,7 +65,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>900</width>
+     <width>850</width>
      <height>28</height>
     </rect>
    </property>
@@ -161,9 +180,16 @@
     <addaction name="actionForce_Quit"/>
     <addaction name="separator"/>
    </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuProgram"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Exit">
@@ -509,6 +535,9 @@
    <property name="text">
     <string>Disc</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+.</string>
+   </property>
   </action>
   <action name="actionAlpha_lower">
    <property name="text">
@@ -537,6 +566,9 @@
    </property>
    <property name="text">
     <string>Standard (numeric)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+.</string>
    </property>
   </action>
   <action name="actionCheckbox">
@@ -599,6 +631,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+J</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>
