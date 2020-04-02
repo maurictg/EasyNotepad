@@ -13,9 +13,7 @@
 #include <QTextListFormat>
 #include <QTextList>
 
-ETab::ETab(MainWindow *mainwindow, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::ETab)
+ETab::ETab(MainWindow *mainwindow, QWidget *parent) : QWidget(parent), ui(new Ui::ETab)
 {
     ui->setupUi(this);
     this->main = mainwindow;
@@ -73,9 +71,13 @@ void ETab::timerTick(){
  * Logic
  */
 
-void ETab::setText(QString text, bool doSave) {
+void ETab::setContent(QString text, bool doSave) {
     ui->textEdit->setHtml(text);
     this->dontSave = !doSave;
+}
+
+QString ETab::getContent() {
+    return ui->textEdit->toHtml();
 }
 
 //Set font format on selected tab
@@ -157,7 +159,7 @@ void ETab::useFile(bool write){
 
 void ETab::openFile() { this->useFile(false);}
 void ETab::saveFile() {
-    if(changes) //Maybe exist check? QFile(Info) as private class variable?
+    if(changes)
         this->useFile(true);
 }
 
@@ -330,4 +332,8 @@ void ETab::setAlign(int type){
             ui->textEdit->setAlignment(Qt::AlignJustify);
         break;
     }
+}
+
+bool ETab::fileExists() {
+    return file->exists();
 }

@@ -33,7 +33,9 @@ public:
     void setStyle(int type);
     void setAlign(int type);
     void focus();
-    void setText(QString text, bool doSave = true);
+    void setContent(QString text, bool doSave = true);
+    QString getContent();
+    bool fileExists();
 
 private slots:
     void timerTick();

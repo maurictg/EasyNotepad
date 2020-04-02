@@ -20,7 +20,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QStringList* params, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -53,10 +53,15 @@ MainWindow::MainWindow(QWidget *parent)
     this->donotload = false;
 
     tempfile = QDir::cleanPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "temp.enff");
+
+    this->params = params;
 }
 
 MainWindow::~MainWindow()
 {
+    if(params != nullptr) {
+        params->clear();
+    }
     delete ui;
 }
 
@@ -149,7 +154,7 @@ void MainWindow::on_actionSave_as_triggered()
     //Get selected tab
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
     if(selected == NULL){
-        std::cout << "Error: selected tab is NULL" << std::endl;
+        std::cerr << "Error: selected tab is NULL" << std::endl;
         return;
     }
 
@@ -183,13 +188,25 @@ void MainWindow::showEvent(QShowEvent *event){
 
     //Try to load temp file
     this->index = 0;
-    this->loadTempFile();
-    if(remember){
-        ui->actionRemeber_opened_files->setChecked(true);
-    } else{
-        //Open new file
-        this->openTab("New file");
+
+    if(params->size() > 0) {
+        for(int i = 0; i < params->size(); i++) {
+            QString name = params->at(i);
+            if(name != "#Close") {
+                openTab(name);
+            }
+        }
+        delete params;
+    } else {
+        this->loadTempFile();
+        if(remember){
+            ui->actionRemeber_opened_files->setChecked(true);
+        } else{
+            //Open new file
+            this->openTab("New file");
+        }
     }
+
     statusBar()->clearMessage();
     this->donotload = true;
 }
@@ -197,7 +214,7 @@ void MainWindow::showEvent(QShowEvent *event){
 //Event thats triggered when user quits
 void MainWindow::closeEvent(QCloseEvent *event){
     on_action_Exit_triggered();
-    event->accept();
+    event->ignore();
 }
 
 //Other menu items
@@ -242,6 +259,7 @@ void MainWindow::on_action_Exit_triggered()
     }
 
     on_actionClose_all_triggered();
+
     std::cout << "Bye!" << std::endl;
     QApplication::exit(0);
 }
@@ -304,9 +322,6 @@ void MainWindow::dropEvent(QDropEvent *event){
 void MainWindow::loadTempFile(){
     remember = false;
 
-    //Create list
-    QJsonArray files;
-
     //Load temp file
     QFile f(tempfile);
     if(f.exists()){
@@ -324,7 +339,14 @@ void MainWindow::loadTempFile(){
                 //Read document to object
                 QJsonObject json = doc.object();
                 if(json.contains("files") && json["files"].isArray()) {
-                    files = json["files"].toArray();
+                    QJsonArray files = json["files"].toArray();
+                    if(files.count() > 0){
+                        for (int i = 0; i < files.size(); i++) {
+                            openTab(files[i].toString());
+                        }
+
+                        remember = true;
+                    }
                 }
 
                 //Screen resolution and other settings. Maybe object "settings"
@@ -339,15 +361,23 @@ void MainWindow::loadTempFile(){
                         MainWindow::setMaximumSize(16777215,16777215);
                     }
                 }
-            }
-        }
 
-        if(files.count() > 0){
-            for (int i = 0; i < files.size(); i++) {
-                openTab(files[i].toString());
-            }
+                if(json.contains("editors") && json["editors"].isArray()) {
+                    QJsonArray arr = json["editors"].toArray();
+                    for(int i = 0; i < arr.size(); i++) {
+                        if(arr[i].isObject()) {
+                            QJsonObject o = arr[i].toObject();
+                            openTab(QString("Quick note #%1").arg(i+1));
+                            ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
+                            selected->setContent(o["content"].toString());
+                        }
+                    }
 
-            remember = true;
+                    if(arr.size() > 0) {
+                        ui->actionRemember_quick_notes->setChecked(true);
+                    }
+                }
+            }
         }
     }
 
@@ -362,10 +392,22 @@ void MainWindow::saveTempFile(){
         return;
     }
 
-    QJsonArray files;
+    QJsonArray files; //Files to be reloaded from disk
+    QJsonArray editors; //Open editors that will be saved
+
     QList<ETab*> tabs = ui->tabs->findChildren<ETab*>() ;
     for (ETab* t : tabs) {
-        files.append(t->getFileName());
+        if(t->fileExists()) {
+            files.append(t->getFileName());
+        } else {
+            if(ui->actionRemember_quick_notes->isChecked() && t->getFileName() != "#About") {
+                QJsonObject editor;
+                editor["content"] = t->getContent();
+                editors.append(editor);
+                t->setContent("", false); //Trick to not save file
+                delete t; //Close tab
+            }
+        }
     }
 
     QJsonArray resolution;
@@ -375,6 +417,7 @@ void MainWindow::saveTempFile(){
     QJsonObject object;
     object["files"] = files;
     object["resolution"] = resolution;
+    object["editors"] = editors;
 
     QJsonDocument doc(object);
     QString res = doc.toJson();
@@ -538,8 +581,8 @@ void MainWindow::changeTab(ACTION action, int argument){
 
 void MainWindow::on_actionAbout_triggered()
 {
-    openTab("About");
+    openTab("#About");
     QString hardCodedAboutPage = "<h1>EasyNotepad++</h1><p>EasyNotepad++ is an richtext editor for Windows and Linux. It supports HTML, Markdown, and plain text files. It is also able to export a file to an odf file. It is made with QT and C++</p><h1>Licence</h1><p>EasyNotepad is licenced under the MIT-licence.</p><br/><h4>&rarr;&nbsp;More info, see <a href=\"https://github.com/maurictg/EasyNotepadPlusPlus\">https://github.com/maurictg/EasyNotepadPlusPlus</a></h4>";
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
-    selected->setText(hardCodedAboutPage, false);
+    selected->setContent(hardCodedAboutPage, false);
 }

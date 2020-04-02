@@ -53,7 +53,18 @@ int main(int argc, char *argv[])
         }
 #endif
 
-    MainWindow w;
+    //Get parameters from CLI
+    QStringList params;
+    for(int i = 0; i < argc; i++){
+        if(i == 0)
+            continue;
+
+        std::cout << argv[i] << std::endl;
+        params << QString::fromLocal8Bit(argv[i]);
+    }
+
+
+    MainWindow w(&params);
     w.setWindowTitle("EasyNotepad");
     w.show();
     return a.exec();

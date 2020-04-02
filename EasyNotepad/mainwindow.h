@@ -17,7 +17,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QStringList* params, QWidget *parent = nullptr);
     ~MainWindow();
     void updateStatusLabel(int line, int col);
     void updateActions(const QTextCharFormat &format);
@@ -74,7 +74,6 @@ private slots:
     void on_actionRight_triggered();
     void on_actionCenter_triggered();
     void on_actionJustify_triggered();
-
     void on_actionAbout_triggered();
 
 private:
@@ -82,6 +81,7 @@ private:
     QLabel *lblStatus;
     QLabel *lblClock;
     QString tempfile;
+    QStringList *params;
     void setFontOnSelected(const QTextCharFormat &format);
     void openTab(QString title);
     void updateActions();
