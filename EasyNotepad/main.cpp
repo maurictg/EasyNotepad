@@ -94,7 +94,7 @@ QJsonObject loadTheme(QApplication *a) {
         } else if(theme == MainWindow::THEME::LIGHT) {
             QColor lightColor = QColor(230,230,230);
             QColor disabledColor = QColor(127,127,127);
-            p.setColor(QPalette::Window, lightColor);
+            p.setColor(QPalette::Window, QColor(255,255,255));
             p.setColor(QPalette::WindowText, Qt::black);
             p.setColor(QPalette::Base, QColor(255,255,255));
             p.setColor(QPalette::AlternateBase, lightColor);
