@@ -172,14 +172,26 @@
     <property name="title">
      <string>Program</string>
     </property>
+    <widget class="QMenu" name="menuTheme">
+     <property name="title">
+      <string>Theme</string>
+     </property>
+     <addaction name="separator"/>
+     <addaction name="separator"/>
+     <addaction name="actionUse_default"/>
+     <addaction name="actionUse_light_theme"/>
+     <addaction name="actionUse_dark_theme"/>
+     <addaction name="actionUse_blue_theme"/>
+    </widget>
     <addaction name="actionStay_topmost"/>
     <addaction name="separator"/>
     <addaction name="actionRemeber_opened_files"/>
     <addaction name="actionRemember_quick_notes"/>
     <addaction name="separator"/>
+    <addaction name="menuTheme"/>
+    <addaction name="separator"/>
     <addaction name="action_Exit"/>
     <addaction name="actionForce_Quit"/>
-    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -649,6 +661,38 @@
    </property>
    <property name="text">
     <string>Remember quick notes</string>
+   </property>
+  </action>
+  <action name="actionUse_default">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use system default</string>
+   </property>
+  </action>
+  <action name="actionUse_light_theme">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use light theme</string>
+   </property>
+  </action>
+  <action name="actionUse_dark_theme">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use dark theme</string>
+   </property>
+  </action>
+  <action name="actionUse_blue_theme">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use blue theme</string>
    </property>
   </action>
  </widget>

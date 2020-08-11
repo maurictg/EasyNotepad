@@ -17,10 +17,10 @@
 #include <QMimeData>
 #include <iostream>
 #include <QJsonObject>
-#include <QJsonDocument>
 #include <QJsonArray>
+#include <qjsondocument.h>
 
-MainWindow::MainWindow(QStringList* params, QWidget *parent)
+MainWindow::MainWindow(QStringList* params, QJsonObject* json, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -55,6 +55,7 @@ MainWindow::MainWindow(QStringList* params, QWidget *parent)
     tempfile = QDir::cleanPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "temp.enff");
 
     this->params = params;
+    this->settings = json;
 }
 
 MainWindow::~MainWindow()
@@ -64,7 +65,6 @@ MainWindow::~MainWindow()
     }
     delete ui;
 }
-
 
 /*
  * Event handlers
@@ -251,6 +251,11 @@ void MainWindow::on_actionRight_triggered() { changeTab(ACTION::ALIGNRIGHT); }
 void MainWindow::on_actionCenter_triggered() { changeTab(ACTION::ALIGNCENTER); }
 void MainWindow::on_actionJustify_triggered() { changeTab(ACTION::ALIGNJUSTIFY); }
 
+void MainWindow::on_actionUse_default_triggered() { setTheme(THEME::DEFAULT, 1); }
+void MainWindow::on_actionUse_light_theme_triggered() { setTheme(THEME::LIGHT, 1); }
+void MainWindow::on_actionUse_dark_theme_triggered() { setTheme(THEME::DARK, 1); }
+void MainWindow::on_actionUse_blue_theme_triggered() { setTheme(THEME::BLUE, 1); }
+
 //Exit application
 void MainWindow::on_action_Exit_triggered()
 {
@@ -322,62 +327,54 @@ void MainWindow::dropEvent(QDropEvent *event){
 void MainWindow::loadTempFile(){
     remember = false;
 
-    //Load temp file
-    QFile f(tempfile);
-    if(f.exists()){
-        if(!f.open(QIODevice::ReadOnly)){
-            std::cerr << "ERROR: Failed to open remembered files" << std::endl;
-            return;
+    if(settings != nullptr) {
+        QJsonObject json = *settings;
+
+        //Saved files
+        if(json.contains("files") && json["files"].isArray()) {
+            QJsonArray files = json["files"].toArray();
+            if(files.count() > 0){
+                for (int i = 0; i < files.size(); i++) {
+                    openTab(files[i].toString());
+                }
+
+                remember = true;
+            }
         }
 
-        QString res = f.readAll();
-        f.close();
+        //Screen resolution and other settings. Maybe object "settings"
+        if(json.contains("resolution") && json["resolution"].isArray()) {
+            QJsonArray arr = json["resolution"].toArray();
+            if(arr.size() == 2) {
+                int width = arr[0].toInt();
+                int heigth = arr[1].toInt();
+                //This is how i resize window without struggles :D
+                MainWindow::setFixedSize(width, heigth);
+                MainWindow::setMinimumSize(0,0);
+                MainWindow::setMaximumSize(16777215,16777215);
+            }
+        }
 
-        if(res.length() > 0) {
-            QJsonDocument doc = QJsonDocument::fromJson(res.toUtf8());
-            if(!doc.isNull() && doc.isObject()) {
-                //Read document to object
-                QJsonObject json = doc.object();
-                if(json.contains("files") && json["files"].isArray()) {
-                    QJsonArray files = json["files"].toArray();
-                    if(files.count() > 0){
-                        for (int i = 0; i < files.size(); i++) {
-                            openTab(files[i].toString());
-                        }
-
-                        remember = true;
-                    }
-                }
-
-                //Screen resolution and other settings. Maybe object "settings"
-                if(json.contains("resolution") && json["resolution"].isArray()) {
-                    QJsonArray arr = json["resolution"].toArray();
-                    if(arr.size() == 2) {
-                        int width = arr[0].toInt();
-                        int heigth = arr[1].toInt();
-                        //This is how i resize window without struggles :D
-                        MainWindow::setFixedSize(width, heigth);
-                        MainWindow::setMinimumSize(0,0);
-                        MainWindow::setMaximumSize(16777215,16777215);
-                    }
-                }
-
-                if(json.contains("editors") && json["editors"].isArray()) {
-                    QJsonArray arr = json["editors"].toArray();
-                    for(int i = 0; i < arr.size(); i++) {
-                        if(arr[i].isObject()) {
-                            QJsonObject o = arr[i].toObject();
-                            openTab(QString("Quick note #%1").arg(i+1));
-                            ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
-                            selected->setContent(o["content"].toString());
-                        }
-                    }
-
-                    if(arr.size() > 0) {
-                        ui->actionRemember_quick_notes->setChecked(true);
-                    }
+        //Open editors (temp files/quick notes)
+        if(json.contains("editors") && json["editors"].isArray()) {
+            QJsonArray arr = json["editors"].toArray();
+            for(int i = 0; i < arr.size(); i++) {
+                if(arr[i].isObject()) {
+                    QJsonObject o = arr[i].toObject();
+                    openTab(QString("Quick note #%1").arg(i+1));
+                    ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
+                    selected->setContent(o["content"].toString());
                 }
             }
+
+            if(arr.size() > 0) {
+                ui->actionRemember_quick_notes->setChecked(true);
+            }
+        }
+
+        //Get theme
+        if(json.contains("theme")) {
+            setTheme((THEME)json["theme"].toInt());
         }
     }
 
@@ -418,6 +415,7 @@ void MainWindow::saveTempFile(){
     object["files"] = files;
     object["resolution"] = resolution;
     object["editors"] = editors;
+    object["theme"] = (int)this->theme;
 
     QJsonDocument doc(object);
     QString res = doc.toJson();
@@ -579,6 +577,33 @@ void MainWindow::changeTab(ACTION action, int argument){
     }
 }
 
+//Set application theme
+void MainWindow::setTheme(THEME theme, bool showMessage) {
+    this->theme = theme;
+    for(QAction *action : ui->menuTheme->actions()){
+        action->setChecked(false);
+    }
+
+    switch (theme) {
+        case LIGHT:
+        ui->actionUse_light_theme->setChecked(true);
+            break;
+        case DARK:
+        ui->actionUse_dark_theme->setChecked(true);
+            break;
+        case BLUE:
+        ui->actionUse_blue_theme->setChecked(true);
+            break;
+        default:
+        ui->actionUse_default->setChecked(true);
+            break;
+    }
+
+    if(showMessage) {
+        QMessageBox::information(this, "Theme change", "Theme change will be applied after application restart.");
+    }
+}
+
 void MainWindow::on_actionAbout_triggered()
 {
     openTab("#About");
@@ -586,3 +611,5 @@ void MainWindow::on_actionAbout_triggered()
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
     selected->setContent(hardCodedAboutPage, false);
 }
+
+

@@ -17,7 +17,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QStringList* params, QWidget *parent = nullptr);
+    MainWindow(QStringList* params, QJsonObject *json = nullptr, QWidget *parent = nullptr);
     ~MainWindow();
     void updateStatusLabel(int line, int col);
     void updateActions(const QTextCharFormat &format);
@@ -29,6 +29,9 @@ public:
         LISTDISK, LISTCIRCLE, LISTSQUARE, LISTUNCHECKED, LISTCHECKED, LISTDECIMAL,
         LISTALPHALOWER, LISTALPHAUPPER, LISTROMANLOWER, LISTROMANUPPER,
         ALIGNLEFT, ALIGNCENTER, ALIGNRIGHT, ALIGNJUSTIFY
+    };
+    enum THEME {
+        DEFAULT, LIGHT, DARK, BLUE
     };
 
 private slots:
@@ -76,12 +79,22 @@ private slots:
     void on_actionJustify_triggered();
     void on_actionAbout_triggered();
 
+    void on_actionUse_default_triggered();
+
+    void on_actionUse_light_theme_triggered();
+
+    void on_actionUse_dark_theme_triggered();
+
+    void on_actionUse_blue_theme_triggered();
+
 private:
     Ui::MainWindow *ui;
     QLabel *lblStatus;
     QLabel *lblClock;
     QString tempfile;
+    QJsonObject *settings;
     QStringList *params;
+    THEME theme;
     void setFontOnSelected(const QTextCharFormat &format);
     void openTab(QString title);
     void updateActions();
@@ -91,6 +104,7 @@ private:
     bool donotload;
     void loadTempFile();
     void saveTempFile();
+    void setTheme(THEME theme, bool showMessage = false);
     void toggleMenu(QMenu* menu, bool disable = true);
     //Event overloads
     void closeEvent(QCloseEvent *event);
