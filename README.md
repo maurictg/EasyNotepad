@@ -16,3 +16,6 @@ Autosave
 ![Autosave](https://raw.githubusercontent.com/maurictg/EasyNotepadPlusPlus/master/Screenshots/autosave.png "Autosave")
 Windows support
 ![Windows support](https://raw.githubusercontent.com/maurictg/EasyNotepadPlusPlus/master/Screenshots/windows.png "Windows support")
+
+Dark, light and blue theme available
+![Themes](https://raw.githubusercontent.com/maurictg/EasyNotepadPlusPlus/master/Screenshots/themes.png "Themes")
