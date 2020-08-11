@@ -91,6 +91,26 @@ QJsonObject loadTheme(QApplication *a) {
                 QTextStream ts(&f);
                 a->setStyleSheet(ts.readAll());
             }
+        } else if(theme == MainWindow::THEME::LIGHT) {
+            QColor lightColor = QColor(230,230,230);
+            QColor disabledColor = QColor(127,127,127);
+            p.setColor(QPalette::Window, lightColor);
+            p.setColor(QPalette::WindowText, Qt::black);
+            p.setColor(QPalette::Base, QColor(255,255,255));
+            p.setColor(QPalette::AlternateBase, lightColor);
+            p.setColor(QPalette::ToolTipBase, Qt::black);
+            p.setColor(QPalette::ToolTipText, Qt::black);
+            p.setColor(QPalette::Text, Qt::black);
+            p.setColor(QPalette::Disabled, QPalette::Text, disabledColor);
+            p.setColor(QPalette::Button, lightColor);
+            p.setColor(QPalette::ButtonText, Qt::black);
+            p.setColor(QPalette::Disabled, QPalette::ButtonText, disabledColor);
+            p.setColor(QPalette::BrightText, Qt::red);
+            p.setColor(QPalette::Link, QColor(42, 130, 218));
+
+            p.setColor(QPalette::Highlight, QColor(42, 130, 218));
+            p.setColor(QPalette::HighlightedText, Qt::white);
+            p.setColor(QPalette::Disabled, QPalette::HighlightedText, disabledColor);
         }
 
         //Set palette
