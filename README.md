@@ -5,7 +5,7 @@ EasyNotepad++ is an richtext editor for Windows and Linux. It supports HTML, Mar
 EasyNotepad is licenced under the MIT-licence.
 
 # Download
-Check the releases page
+Check the [releases](https://github.com/maurictg/EasyNotepad/releases) page
 
 ## Screenshots
 
