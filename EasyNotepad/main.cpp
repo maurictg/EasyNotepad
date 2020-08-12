@@ -16,7 +16,7 @@ QJsonObject loadTheme(QApplication *a) {
     QJsonObject json;
 
     //Read settings file
-    QString tempfile = QDir::cleanPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "temp.enff");
+    QString tempfile = QDir::cleanPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "easynotepad.json");
     QFile s(tempfile);
 
     if(s.exists()){

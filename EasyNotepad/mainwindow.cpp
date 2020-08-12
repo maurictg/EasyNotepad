@@ -52,7 +52,7 @@ MainWindow::MainWindow(QStringList* params, QJsonObject* json, QWidget *parent)
     setAcceptDrops(true);
     this->donotload = false;
 
-    tempfile = QDir::cleanPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "temp.enff");
+    tempfile = QDir::cleanPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "easynotepad.json");
 
     this->params = params;
     this->settings = json;
@@ -199,12 +199,6 @@ void MainWindow::showEvent(QShowEvent *event){
         delete params;
     } else {
         this->loadTempFile();
-        if(remember){
-            ui->actionRemeber_opened_files->setChecked(true);
-        } else{
-            //Open new file
-            this->openTab("New file");
-        }
     }
 
     statusBar()->clearMessage();
@@ -256,13 +250,12 @@ void MainWindow::on_actionUse_light_theme_triggered() { setTheme(THEME::LIGHT, 1
 void MainWindow::on_actionUse_dark_theme_triggered() { setTheme(THEME::DARK, 1); }
 void MainWindow::on_actionUse_blue_theme_triggered() { setTheme(THEME::BLUE, 1); }
 
+void MainWindow::on_actionRemeber_opened_files_triggered() {}
+
 //Exit application
 void MainWindow::on_action_Exit_triggered()
 {
-    if(remember){
-        saveTempFile();
-    }
-
+    saveTempFile();
     on_actionClose_all_triggered();
 
     std::cout << "Bye!" << std::endl;
@@ -294,17 +287,6 @@ void MainWindow::on_actionClose_all_triggered()
     updateMessage(QString("Closed %1 files").arg(cnt));
 }
 
-//Remeber opened files in temp.enff (documents folder)
-void MainWindow::on_actionRemeber_opened_files_triggered()
-{
-    remember = ui->actionRemeber_opened_files->isChecked();
-    if(!remember){
-        QFile f(tempfile);
-        if(f.exists()){
-            f.remove();
-        }
-    }
-}
 
 //Drag and drop
 void MainWindow::dragEnterEvent(QDragEnterEvent *event){
@@ -324,8 +306,8 @@ void MainWindow::dropEvent(QDropEvent *event){
  */
 
 //Load temp file if exists
-void MainWindow::loadTempFile(){
-    remember = false;
+void MainWindow::loadTempFile(){    
+    bool restoreAny = false;
 
     if(settings != nullptr) {
         QJsonObject json = *settings;
@@ -338,7 +320,8 @@ void MainWindow::loadTempFile(){
                     openTab(files[i].toString());
                 }
 
-                remember = true;
+                restoreAny = true;
+                ui->actionRemeber_opened_files->setChecked(true);
             }
         }
 
@@ -358,16 +341,17 @@ void MainWindow::loadTempFile(){
         //Open editors (temp files/quick notes)
         if(json.contains("editors") && json["editors"].isArray()) {
             QJsonArray arr = json["editors"].toArray();
-            for(int i = 0; i < arr.size(); i++) {
-                if(arr[i].isObject()) {
-                    QJsonObject o = arr[i].toObject();
-                    openTab(QString("Quick note #%1").arg(i+1));
-                    ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
-                    selected->setContent(o["content"].toString());
-                }
-            }
-
             if(arr.size() > 0) {
+                for(int i = 0; i < arr.size(); i++) {
+                    if(arr[i].isObject()) {
+                        QJsonObject o = arr[i].toObject();
+                        openTab(QString("Quick note #%1").arg(i+1));
+                        ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
+                        selected->setContent(o["content"].toString());
+                    }
+                }
+
+                restoreAny = true;
                 ui->actionRemember_quick_notes->setChecked(true);
             }
         }
@@ -378,7 +362,10 @@ void MainWindow::loadTempFile(){
         }
     }
 
-    ui->actionRemeber_opened_files->setChecked(remember);
+    //If nothing is opened: open new tab
+    if(!restoreAny) {
+        this->openTab("New file");
+    }
 }
 
 //Write temp file to disk
@@ -395,12 +382,18 @@ void MainWindow::saveTempFile(){
     QList<ETab*> tabs = ui->tabs->findChildren<ETab*>() ;
     for (ETab* t : tabs) {
         if(t->fileExists()) {
-            files.append(t->getFileName());
+            if(ui->actionRemeber_opened_files->isChecked()) {
+                files.append(t->getFileName());
+            }
         } else {
             if(ui->actionRemember_quick_notes->isChecked() && t->getFileName() != "#About") {
                 QJsonObject editor;
                 editor["content"] = t->getContent();
-                editors.append(editor);
+
+                if(t->hasChanges()) {
+                    editors.append(editor);
+                }
+
                 t->setContent("", false); //Trick to not save file
                 delete t; //Close tab
             }
@@ -408,8 +401,13 @@ void MainWindow::saveTempFile(){
     }
 
     QJsonArray resolution;
-    resolution.append(MainWindow::width());
-    resolution.append(MainWindow::height());
+    if(MainWindow::isMaximized()) {
+        resolution.append(MainWindow::normalGeometry().width());
+        resolution.append(MainWindow::normalGeometry().height());
+    } else {
+        resolution.append(MainWindow::width());
+        resolution.append(MainWindow::height());
+    }
 
     QJsonObject object;
     object["files"] = files;
@@ -548,9 +546,11 @@ void MainWindow::changeTab(ACTION action, int argument){
             //Close and current tab
             if(!info.exists() && selected->hasChanges())
             {
-                QMessageBox::StandardButton res = QMessageBox::question(this, "Save file?", QString("Do you want to save %1?").arg(info.fileName()), QMessageBox::Save|QMessageBox::Discard);
+                QMessageBox::StandardButton res = QMessageBox::question(this, "Save file?", QString("Do you want to save %1?").arg(info.fileName()), QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel);
                 if(res == QMessageBox::Save){
                     on_actionSave_as_triggered();
+                } else if(res == QMessageBox::Cancel) {
+                    return;
                 }
             }
             else
@@ -607,7 +607,7 @@ void MainWindow::setTheme(THEME theme, bool showMessage) {
 void MainWindow::on_actionAbout_triggered()
 {
     openTab("#About");
-    QString hardCodedAboutPage = "<h1>EasyNotepad++</h1><p>EasyNotepad++ is an richtext editor for Windows and Linux. It supports HTML, Markdown, and plain text files. It is also able to export a file to an odf file. It is made with QT and C++</p><h1>Licence</h1><p>EasyNotepad is licenced under the MIT-licence.</p><br/><h4>&rarr;&nbsp;More info, see <a href=\"https://github.com/maurictg/EasyNotepadPlusPlus\">https://github.com/maurictg/EasyNotepadPlusPlus</a></h4>";
+    QString hardCodedAboutPage = "<h1>EasyNotepad++</h1><p>EasyNotepad++ is an richtext editor for Windows and Linux. It supports HTML, Markdown, and plain text files. It is also able to export a file to an ODT-file. It is made with QT and C++</p><h1>Licence</h1><p>EasyNotepad is licenced under the MIT-licence.</p><br/><h4>&rarr;&nbsp;More info, see <a href=\"https://github.com/maurictg/EasyNotepadPlusPlus\">https://github.com/maurictg/EasyNotepadPlusPlus</a></h4>";
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
     selected->setContent(hardCodedAboutPage, false);
 }

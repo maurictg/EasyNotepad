@@ -78,13 +78,9 @@ private slots:
     void on_actionCenter_triggered();
     void on_actionJustify_triggered();
     void on_actionAbout_triggered();
-
     void on_actionUse_default_triggered();
-
     void on_actionUse_light_theme_triggered();
-
     void on_actionUse_dark_theme_triggered();
-
     void on_actionUse_blue_theme_triggered();
 
 private:
@@ -100,7 +96,6 @@ private:
     void updateActions();
     void changeTab(ACTION action, int argument = 0);
     int index;
-    bool remember;
     bool donotload;
     void loadTempFile();
     void saveTempFile();
