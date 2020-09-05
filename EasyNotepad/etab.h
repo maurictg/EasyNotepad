@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QTextListFormat>
 #include <QTextCharFormat>
+#include <QColor>
 #include <mainwindow.h>
 
 namespace Ui {
@@ -34,8 +35,11 @@ public:
     void setAlign(int type);
     void focus();
     void setContent(QString text, bool doSave = true);
+    void mergeFormat(QTextCharFormat format);
     QString getContent();
     bool fileExists();
+    QColor foreground();
+    QColor background();
 
 private slots:
     void timerTick();
@@ -52,7 +56,6 @@ private:
     bool changes;
     bool dontSave;
     void useFile(bool write);
-    void mergeFormat(QTextCharFormat format);
     QString getName();
 };
 

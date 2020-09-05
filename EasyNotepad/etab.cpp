@@ -3,7 +3,6 @@
 
 #include <QAction>
 #include <QFontDialog>
-#include <QColorDialog>
 #include <QFileInfo>
 #include <QFile>
 #include <QTextDocumentWriter>
@@ -12,6 +11,8 @@
 #include <QTextStream>
 #include <QTextListFormat>
 #include <QTextList>
+
+#include <colorpicker.h>
 
 ETab::ETab(MainWindow *mainwindow, QWidget *parent) : QWidget(parent), ui(new Ui::ETab)
 {
@@ -212,12 +213,8 @@ void ETab::changeFont() {
 
 //Change font color
 void ETab::changeColor(){
-    QColor color = QColorDialog::getColor(ui->textEdit->textColor(), this);
-    if(color.isValid()){
-        QTextCharFormat format;
-        format.setForeground(color);
-        mergeFormat(format);
-    }
+    ColorPicker *p = new ColorPicker(this);
+    p->exec();
 }
 
 //Merge font format into current cursor
@@ -225,6 +222,14 @@ void ETab::mergeFormat(QTextCharFormat format){
     QTextCursor cursor = ui->textEdit->textCursor();
     cursor.mergeCharFormat(format);
     ui->textEdit->mergeCurrentCharFormat(format);
+}
+
+QColor ETab::foreground() {
+    return ui->textEdit->textCursor().charFormat().foreground().color();
+}
+
+QColor ETab::background() {
+    return ui->textEdit->textCursor().charFormat().background().color();
 }
 
 //Set special style like header or list
