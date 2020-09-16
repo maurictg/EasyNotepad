@@ -13,10 +13,12 @@
 #include <QTextList>
 
 #include <colorpicker.h>
+#include <urlpicker.h>
 
 ETab::ETab(MainWindow *mainwindow, QWidget *parent) : QWidget(parent), ui(new Ui::ETab)
 {
     ui->setupUi(this);
+
     this->main = mainwindow;
     ui->textEdit->setFrameStyle(QFrame::NoFrame);
     QFont font("Consolas", 14);
@@ -222,6 +224,27 @@ void ETab::mergeFormat(QTextCharFormat format){
     QTextCursor cursor = ui->textEdit->textCursor();
     cursor.mergeCharFormat(format);
     ui->textEdit->mergeCurrentCharFormat(format);
+}
+
+void ETab::insertLink(QString text, QString url) {
+    QTextCursor cursor = ui->textEdit->textCursor();
+    if(cursor.hasSelection())
+    {
+        cursor.insertHtml("<a href=\""+url+"\">"+text+"</a>&nbsp;");
+    }
+}
+
+void ETab::createLink() {
+    UrlPicker *p = new UrlPicker(this);
+    p->exec();
+}
+
+QString ETab::getSelection() {
+    QTextCursor cursor = ui->textEdit->textCursor();
+    if(cursor.hasSelection())
+        return cursor.selectedText();
+    else
+        return "";
 }
 
 QColor ETab::foreground() {

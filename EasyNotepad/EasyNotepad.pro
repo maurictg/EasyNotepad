@@ -19,17 +19,20 @@ SOURCES += \
     colorpicker.cpp \
     etab.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    urlpicker.cpp
 
 HEADERS += \
     colorpicker.h \
     etab.h \
-    mainwindow.h
+    mainwindow.h \
+    urlpicker.h
 
 FORMS += \
     colorpicker.ui \
     etab.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    urlpicker.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

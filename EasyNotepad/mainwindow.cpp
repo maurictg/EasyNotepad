@@ -250,7 +250,10 @@ void MainWindow::on_actionUse_light_theme_triggered() { setTheme(THEME::LIGHT, 1
 void MainWindow::on_actionUse_dark_theme_triggered() { setTheme(THEME::DARK, 1); }
 void MainWindow::on_actionUse_blue_theme_triggered() { setTheme(THEME::BLUE, 1); }
 
+void MainWindow::on_actionHyperlink_triggered() { changeTab(ACTION::CREATELINK); }
+
 void MainWindow::on_actionRemeber_opened_files_triggered() {}
+
 
 //Exit application
 void MainWindow::on_action_Exit_triggered()
@@ -574,6 +577,9 @@ void MainWindow::changeTab(ACTION action, int argument){
         case ACTION::ALIGNLEFT: case ACTION::ALIGNRIGHT: case ACTION::ALIGNCENTER: case ACTION::ALIGNJUSTIFY:
             selected->setAlign((action - ACTION::ALIGNLEFT));
         break;
+        case ACTION::CREATELINK:
+            selected->createLink();
+        break;
     }
 }
 
@@ -611,5 +617,7 @@ void MainWindow::on_actionAbout_triggered()
     ETab *selected = ui->tabs->findChild<ETab *>(ui->tabs->currentWidget()->objectName());
     selected->setContent(hardCodedAboutPage, false);
 }
+
+
 
 

@@ -34,12 +34,12 @@
     <rect>
      <x>10</x>
      <y>30</y>
-     <width>231</width>
+     <width>341</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>Please choose your desired colors</string>
+    <string>Please choose your desired colors (press Alt+O to apply)</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btnForeground">
@@ -47,12 +47,21 @@
     <rect>
      <x>10</x>
      <y>60</y>
-     <width>131</width>
+     <width>201</width>
      <height>34</height>
     </rect>
    </property>
    <property name="text">
-    <string>Select foreground</string>
+    <string>Select foreground (Ctrl+F)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+   <property name="default">
+    <bool>false</bool>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="btnBackground">
@@ -60,18 +69,21 @@
     <rect>
      <x>10</x>
      <y>100</y>
-     <width>131</width>
+     <width>201</width>
      <height>34</height>
     </rect>
    </property>
    <property name="text">
-    <string>Select background</string>
+    <string>Select background (Ctrl+B)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </widget>
   <widget class="QFrame" name="foreground">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>230</x>
      <y>67</y>
      <width>31</width>
      <height>21</height>
@@ -90,7 +102,7 @@
   <widget class="QFrame" name="background">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>230</x>
      <y>105</y>
      <width>31</width>
      <height>21</height>

@@ -36,6 +36,9 @@ public:
     void focus();
     void setContent(QString text, bool doSave = true);
     void mergeFormat(QTextCharFormat format);
+    void insertLink(QString title, QString url);
+    void createLink();
+    QString getSelection();
     QString getContent();
     bool fileExists();
     QColor foreground();

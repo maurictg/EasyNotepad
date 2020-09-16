@@ -196,8 +196,15 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuInsert">
+    <property name="title">
+     <string>Insert</string>
+    </property>
+    <addaction name="actionHyperlink"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuInsert"/>
    <addaction name="menuProgram"/>
    <addaction name="menuAbout"/>
   </widget>
@@ -690,6 +697,14 @@
    </property>
    <property name="text">
     <string>Use blue theme</string>
+   </property>
+  </action>
+  <action name="actionHyperlink">
+   <property name="text">
+    <string>Hyperlink</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+H</string>
    </property>
   </action>
  </widget>

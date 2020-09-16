@@ -28,7 +28,7 @@ public:
         SETHNORMAL, SETH1, SETH2, SETH3, SETH4, SETH5, SETH6,
         LISTDISK, LISTCIRCLE, LISTSQUARE, LISTUNCHECKED, LISTCHECKED, LISTDECIMAL,
         LISTALPHALOWER, LISTALPHAUPPER, LISTROMANLOWER, LISTROMANUPPER,
-        ALIGNLEFT, ALIGNCENTER, ALIGNRIGHT, ALIGNJUSTIFY
+        ALIGNLEFT, ALIGNCENTER, ALIGNRIGHT, ALIGNJUSTIFY, CREATELINK
     };
     enum THEME {
         DEFAULT, LIGHT, DARK, BLUE
@@ -82,6 +82,7 @@ private slots:
     void on_actionUse_light_theme_triggered();
     void on_actionUse_dark_theme_triggered();
     void on_actionUse_blue_theme_triggered();
+    void on_actionHyperlink_triggered();
 
 private:
     Ui::MainWindow *ui;

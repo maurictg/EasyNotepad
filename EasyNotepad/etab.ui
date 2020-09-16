@@ -10,6 +10,12 @@
     <height>421</height>
    </rect>
   </property>
+  <property name="cursor">
+   <cursorShape>ArrowCursor</cursorShape>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::StrongFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -27,7 +33,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="QTextEdit" name="textEdit">
+    <widget class="QTextBrowser" name="textEdit">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -40,20 +46,43 @@
        <pointsize>12</pointsize>
       </font>
      </property>
+     <property name="cursor" stdset="0">
+      <cursorShape>IBeamCursor</cursorShape>
+     </property>
      <property name="styleSheet">
       <string notr="true">margin: 3px;</string>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Sunken</enum>
      </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+     <property name="midLineWidth">
+      <number>-5</number>
+     </property>
+     <property name="undoRedoEnabled">
+      <bool>true</bool>
+     </property>
      <property name="lineWrapMode">
       <enum>QTextEdit::WidgetWidth</enum>
      </property>
      <property name="textInteractionFlags">
-      <set>Qt::LinksAccessibleByMouse|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+      <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
      </property>
      <property name="placeholderText">
       <string>Take a note...</string>
+     </property>
+     <property name="source">
+      <url>
+       <string/>
+      </url>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+     <property name="openLinks">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

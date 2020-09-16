@@ -16,7 +16,6 @@ class ColorPicker : public QDialog {
 public:
     explicit ColorPicker(ETab *tab = nullptr);
     ~ColorPicker();
-    void show();
 
 private slots:
     void on_btnForeground_clicked();

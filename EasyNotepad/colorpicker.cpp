@@ -20,6 +20,7 @@ ColorPicker::~ColorPicker() {
     delete ui;
 }
 
+//Set color squares
 void ColorPicker::updateColors() {
     ui->foreground->setStyleSheet("background-color: " + this->foreground.name());
     ui->background->setStyleSheet("background-color: " + this->background.name());
