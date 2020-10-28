@@ -29,7 +29,7 @@ public:
     void changeFont();
     void changeColor();
     void openFile();
-    void saveFile();
+    void saveFile(bool force = false);
     void setAutoSave(bool enabled);
     void setStyle(int type);
     void setAlign(int type);

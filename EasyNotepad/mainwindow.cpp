@@ -163,7 +163,7 @@ void MainWindow::on_actionSave_as_triggered()
     QFile f(filename);
     f.open(QIODevice::ReadWrite); //This creates the file
     ui->tabs->setTabText(ui->tabs->currentIndex(), info.fileName());
-    changeTab(ACTION::SAVE);
+    changeTab(ACTION::SAVEAS);
 }
 
 //Save file
@@ -532,6 +532,11 @@ void MainWindow::changeTab(ACTION action, int argument){
             if(!info.exists())
                 on_actionSave_as_triggered();
             selected->saveFile();
+        }
+        break;
+        case ACTION::SAVEAS:
+        {
+            selected->saveFile(true);
         }
         break;
         case ACTION::DELETE:

@@ -161,8 +161,8 @@ void ETab::useFile(bool write){
 }
 
 void ETab::openFile() { this->useFile(false);}
-void ETab::saveFile() {
-    if(changes)
+void ETab::saveFile(bool force) {
+    if(changes || force)
         this->useFile(true);
 }
 
@@ -228,10 +228,7 @@ void ETab::mergeFormat(QTextCharFormat format){
 
 void ETab::insertLink(QString text, QString url) {
     QTextCursor cursor = ui->textEdit->textCursor();
-    if(cursor.hasSelection())
-    {
-        cursor.insertHtml("<a href=\""+url+"\">"+text+"</a>&nbsp;");
-    }
+    cursor.insertHtml("<a href=\""+url+"\">"+text+"</a>&nbsp;");
 }
 
 void ETab::createLink() {
